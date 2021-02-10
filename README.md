@@ -17,5 +17,6 @@ React Native application for using the device’s camera to scan QR codes and st
 
 ### START
 
+-   Clear out previous build cache `rm -rf node_modules/.cache/babel-loader/*`
 -   Run `yarn start` to start the local Expo server
 -   Scan QR code with Expo app on device to preview app
