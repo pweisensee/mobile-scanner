@@ -11,6 +11,8 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { persistor, store } from './modules/store';
+import { ThemeProvider } from 'react-native-elements';
+import Theme from './constants/Theme';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -38,11 +40,13 @@ export default function App() {
         return (
             <SafeAreaProvider>
                 <Provider store={store}>
-                    <PersistGate
-                        loading={null}
-                        persistor={persistor}
-                        children={(hydrated: boolean) => renderApp(hydrated)}
-                    />
+                    <ThemeProvider theme={Theme}>
+                        <PersistGate
+                            loading={null}
+                            persistor={persistor}
+                            children={(hydrated: boolean) => renderApp(hydrated)}
+                        />
+                    </ThemeProvider>
                 </Provider>
             </SafeAreaProvider>
         );
