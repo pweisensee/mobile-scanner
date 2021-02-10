@@ -1,8 +1,9 @@
 import Constants from 'expo-constants';
+import { SENDGRID_API_KEY } from '@env';
 
 const CONFIG = {
     ACTIVITY_URL: 'https://api.sendgrid.com/v3/messages',
-    API_KEY: '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',
+    API_KEY: SENDGRID_API_KEY,
     CUSTOM_ARG: Constants.installationId,
     FROM_EMAIL: 'team+sendgrid@synergetx.io',
     SEND_URL: 'https://api.sendgrid.com/v3/mail/send',

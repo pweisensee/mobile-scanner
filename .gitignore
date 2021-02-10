@@ -12,6 +12,7 @@ node_modules/**/*
 web-build/
 
 #Keys
+.env
 *.jks
 *.p8
 *.p12
