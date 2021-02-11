@@ -1,7 +1,7 @@
 import React from 'react';
 import { openURL } from 'expo-linking';
-import { StyleSheet, View } from 'react-native';
-import { colors, Icon, ListItem } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
+import { Icon, ListItem } from 'react-native-elements';
 
 import { ScanRecord } from '../types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -41,7 +41,6 @@ export default function ScanRecordListItem(props: Props) {
                     <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
                 </ListItem.Content>
             </TouchableOpacity>
-            <Icon name="share" type="entypo" onPress={() => toggleSelected(id)} />
         </ListItem>
     );
 }
