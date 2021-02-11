@@ -9,6 +9,7 @@ import NewScanButton from '../components/NewScanButton';
 import { AppState, ScanStackParamList } from '../types';
 import ScanRecordListItem from '../components/ScanRecordListItem';
 import ScanHistoryActions from '../components/ScanHistoryActions';
+import Toast from 'react-native-toast-message';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'ScanHistory'> {}
 
@@ -20,12 +21,12 @@ export default function ScanHistoryScreen(props: Props) {
     const selectScans = (state: AppState) => state.scans;
     const currentScans = useSelector(selectScans);
 
-    // toggle to allow multi-select instead of opening links on tap
-    const selectMode = route.params?.selectMode || false;
-
     // save selected scan Ids in route params
     const selectedScanIds = route.params?.selectedScanIds || [];
     const setSelectedScans = (ids: number[]) => navigation.setParams({ selectedScanIds: ids });
+
+    // toggle to allow multi-select instead of opening links on tap
+    const selectMode = selectedScanIds.length > 0;
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -42,6 +43,18 @@ export default function ScanHistoryScreen(props: Props) {
 
     const toggleSelection = (id: number) => {
         const index = selectedScanIds.indexOf(id);
+
+        // notify users about UI features
+        if (selectedScanIds.length === 0 || index < 0) {
+            Toast.show({
+                text1: `${selectedScanIds.length + 1} item selected`,
+                text2: 'Use the action buttons in the top right to delete or email',
+            });
+        } else if (index > -1) {
+            // item has been removed from selection, close toast to mimize confusion
+            Toast.hide();
+        }
+
         if (index < 0) {
             setSelectedScans([...selectedScanIds, id]);
         } else {

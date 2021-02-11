@@ -13,6 +13,7 @@ import { persistor, store } from './modules/store';
 import { ThemeProvider } from 'react-native-elements';
 import Theme from './constants/Theme';
 import { View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
@@ -24,6 +25,7 @@ export default function App() {
                 <ErrorBoundary location={`App Level`}>
                     <Navigation colorScheme={colorScheme} />
                     <StatusBar />
+                    <Toast ref={(ref) => Toast.setRef(ref)} position={'bottom'} />
                 </ErrorBoundary>
             );
         }

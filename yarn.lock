@@ -6810,7 +6810,7 @@ prompts@^2.0.1, prompts@^2.2.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -6908,13 +6908,6 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.1.tgz#5b3531bd76a645a4c9fb6e693ed36419e3301339"
   integrity sha512-NAnt2iGDXohE5LI7uBnLnqvLQMtzhkiAOLXTmv+qnF9Ky7xAPcX8Up/xWIhxvLVGJvuLiNc4xQLtuqDRzb4fSA==
 
-react-native-easy-toast@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-easy-toast/-/react-native-easy-toast-2.0.0.tgz#059671ed23efd7fbe2855a1c3e4d21e6c4222a84"
-  integrity sha512-mLvHOy/slCJfgrLfOercIhVKslTF6D7NrJ7XLTRK3BCim7kNO1JdAgQ5+IF6bqdcUcFMIW/GwiauUbnSpynr8Q==
-  dependencies:
-    prop-types "^15.5.10"
-
 react-native-elements@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-3.2.0.tgz#0880801ad5be6d1da9848b57659b0f62b8ebb9f4"
@@ -6967,6 +6960,13 @@ react-native-size-matters@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/react-native-size-matters/-/react-native-size-matters-0.3.1.tgz#24d0cfc335a2c730f6d58bd7b43ea5a41be4b49f"
   integrity sha512-mKOfBLIBFBcs9br1rlZDvxD5+mAl8Gfr5CounwJtxI6Z82rGrMO+Kgl9EIg3RMVf3G855a85YVqHJL2f5EDRlw==
+
+react-native-toast-message@^1.4.4:
+  version "1.4.4"
+  resolved "https://registry.yarnpkg.com/react-native-toast-message/-/react-native-toast-message-1.4.4.tgz#6da1991d8363c5832f1f204b61c4249d033f96d6"
+  integrity sha512-o11dgJPBycKfeCqJ8WMjmo7pPG/AE2KRgK6ouHBTWxay5nlD4U0mG9gt34gLmsHT1RwO6/3/hvEsWRet4lewJA==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-web@~0.13.12:
   version "0.13.18"

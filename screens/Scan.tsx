@@ -8,6 +8,7 @@ import { canOpenURL } from 'expo-linking';
 
 import { ScanStackParamList, ScanRecord } from '../types';
 import { addScan } from '../modules/actions';
+import Toast from 'react-native-toast-message';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'Scan'> {}
 
@@ -30,6 +31,12 @@ export default function ScanScreen(props: Props) {
         setScanned(true);
         saveScan({ data, id: Date.now(), isLink: await canOpenURL(data), type });
         props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
+
+        Toast.show({
+            text1: `New code scanned!`,
+            text2: `${data.substring(0, 30)}${data.length > 30 ? `...` : ''}`,
+            visibilityTime: 3000,
+        });
     };
 
     if (hasPermission === null) {

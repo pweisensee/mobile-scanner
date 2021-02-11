@@ -5,18 +5,17 @@ import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Input } from 'react-native-elements';
 import isEmail from 'validator/lib/isEmail';
-import Toast from 'react-native-easy-toast';
 
 import { AppState, ScanStackParamList } from '../types';
 import Separator from '../components/Separator';
 import { sendGridEmail } from '../modules/sendgrid';
+import Toast from 'react-native-toast-message';
 
 const SUBJECT = 'QR Scan Contents';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'Email'> {}
 
 export default function EmailScreen(props: Props) {
-    const toastRef = useRef<Toast>(null);
     const { route } = props;
 
     // current scans in Redux
@@ -39,7 +38,10 @@ export default function EmailScreen(props: Props) {
             setErrorMessage('');
             const success = await sendGridEmail(toAddress, SUBJECT, body);
             if (success) {
-                toastRef.current?.show('Success! Email sent.', 5000);
+                Toast.show({
+                    text1: 'Success! Email sent.',
+                    visibilityTime: 5000,
+                });
             } else {
                 setErrorMessage('Whoops! There was an issue sending that email. Try again later.');
             }

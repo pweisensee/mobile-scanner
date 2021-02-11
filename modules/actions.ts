@@ -1,4 +1,5 @@
 // Nava Actions
+import Toast from 'react-native-toast-message';
 import { Dispatch } from 'redux';
 
 import { Action, ScanRecord } from '../types';
@@ -20,5 +21,8 @@ export function addScan(scan: ScanRecord): Action {
 }
 
 export function removeScans(scanIds: number[]): Action {
+    Toast.show({
+        text1: `${scanIds.length} items deleted`,
+    });
     return { type: 'REMOVE_SCANS', scanIds };
 }

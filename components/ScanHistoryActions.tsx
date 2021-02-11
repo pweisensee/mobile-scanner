@@ -17,6 +17,7 @@ export default function ScanHistoryActions(props: Props) {
 
     // delete scans from redux
     const deleteScans = () => dispatch(removeScans(selectedScanIds));
+    console.log(`${selectedScanIds.length} items selected`);
 
     return (
         <View style={styles.rowContainer}>
@@ -30,40 +31,28 @@ export default function ScanHistoryActions(props: Props) {
                         }
                         title="Cancel"
                     />
-                    {selectedScanIds.length ? (
-                        <>
-                            <Button
-                                buttonStyle={[{ backgroundColor: 'red' }]}
-                                icon={{
-                                    color: 'white',
-                                    name: 'delete-forever',
-                                    type: 'material-community',
-                                }}
-                                onPress={deleteScans}
-                                title="Delete"
-                            />
-                            <Button
-                                containerStyle={[{ marginHorizontal: 10 }]}
-                                icon={{
-                                    color: 'white',
-                                    name: 'email-outline',
-                                    type: 'material-community',
-                                }}
-                                onPress={() => navigation.navigate('Email', { selectedScanIds })}
-                                title="Email"
-                            />
-                        </>
-                    ) : null}
+                    <Button
+                        buttonStyle={[{ backgroundColor: 'red' }]}
+                        icon={{
+                            color: 'white',
+                            name: 'delete-forever',
+                            type: 'material-community',
+                        }}
+                        onPress={deleteScans}
+                        title="Delete"
+                    />
+                    <Button
+                        containerStyle={[{ marginHorizontal: 10 }]}
+                        icon={{
+                            color: 'white',
+                            name: 'email-outline',
+                            type: 'material-community',
+                        }}
+                        onPress={() => navigation.navigate('Email', { selectedScanIds })}
+                        title="Email"
+                    />
                 </>
-            ) : (
-                <Button
-                    buttonStyle={[{ paddingHorizontal: 15 }]}
-                    containerStyle={[{ paddingRight: 10 }]}
-                    icon={{ color: 'white', name: 'playlist-edit', type: 'material-community' }}
-                    onPress={() => navigation.setParams({ selectMode: true })}
-                    title="Edit"
-                />
-            )}
+            ) : null}
         </View>
     );
 }
