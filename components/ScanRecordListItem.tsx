@@ -1,9 +1,10 @@
 import React from 'react';
 import { openURL } from 'expo-linking';
 import { StyleSheet, View } from 'react-native';
-import { Icon, ListItem } from 'react-native-elements';
+import { colors, Icon, ListItem } from 'react-native-elements';
 
 import { ScanRecord } from '../types';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
     isSelected: boolean;
@@ -20,29 +21,38 @@ export default function ScanRecordListItem(props: Props) {
         if (selectMode) {
             return () => toggleSelected(id);
         } else if (isLink) {
+            // links should open, when not in select mode
             return () => openURL(data);
         } else {
-            return undefined;
-        }
-    };
-
-    const leftIcon = () => {
-        if (selectMode) {
-            return <ListItem.CheckBox checked={isSelected} onPress={onPress()} />;
-        } else if (isLink) {
-            return <Icon name="open-outline" type="ionicon" />;
-        } else {
-            return null;
+            // if an item isn't a link, enable multi-selection when tapping the text
+            return () => toggleSelected(id);
         }
     };
 
     return (
-        <ListItem bottomDivider onPress={onPress()}>
-            {leftIcon()}
-            <ListItem.Content>
-                <ListItem.Title style={isLink ? styles.title : undefined}>{data}</ListItem.Title>
-                <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
-            </ListItem.Content>
+        <ListItem
+            bottomDivider
+            style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'red', width: '100%' }}
+        >
+            <ListItem.CheckBox
+                style={{ flex: 1 }}
+                checked={isSelected}
+                onPress={() => toggleSelected(id)}
+            />
+            <TouchableOpacity onPress={onPress()}>
+                <ListItem.Content style={{ backgroundColor: 'green', flex: 8 }}>
+                    <ListItem.Title style={isLink ? styles.title : undefined}>
+                        {data}
+                    </ListItem.Title>
+                    <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
+                </ListItem.Content>
+            </TouchableOpacity>
+            <Icon
+                style={{ flex: 1 }}
+                name="share"
+                type="entypo"
+                onPress={() => toggleSelected(id)}
+            />
         </ListItem>
     );
 }
