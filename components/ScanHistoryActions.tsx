@@ -42,6 +42,7 @@ export default function ScanHistoryActions(props: Props) {
                         onPress={() => {
                             navigation.setParams({ selectedScanIds: [], selectMode: false });
                             Toast.show({
+                                type: 'info',
                                 text1: `All selections cancelled`,
                                 visibilityTime: 2500,
                             });

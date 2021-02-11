@@ -5,10 +5,10 @@ import { Button } from 'react-native-elements';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BarCodeEvent, BarCodeScanner, Constants as BarCodeConstants } from 'expo-barcode-scanner';
 import { canOpenURL } from 'expo-linking';
+import Toast from 'react-native-toast-message';
 
 import { ScanStackParamList, ScanRecord } from '../types';
 import { addScan } from '../modules/actions';
-import Toast from 'react-native-toast-message';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'Scan'> {}
 
@@ -33,6 +33,7 @@ export default function ScanScreen(props: Props) {
         props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
 
         Toast.show({
+            type: 'success',
             text1: `New code scanned!`,
             text2: `${data.substring(0, 30)}${data.length > 30 ? `...` : ''}`,
             visibilityTime: 3000,

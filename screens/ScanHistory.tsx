@@ -47,6 +47,7 @@ export default function ScanHistoryScreen(props: Props) {
         // notify users about UI features only if they selected more items than previously selected
         if (selectedScanIds.length === 0 || index < 0) {
             Toast.show({
+                type: 'info',
                 text1: `${selectedScanIds.length + 1} item selected`,
                 text2: 'Use the action buttons in the top right to delete or email',
             });

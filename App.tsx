@@ -1,8 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from 'react-native-elements';
+import Toast from 'react-native-toast-message';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingIndicator from './components/LoadingIndicator';
@@ -10,10 +13,7 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { persistor, store } from './modules/store';
-import { ThemeProvider } from 'react-native-elements';
 import Theme from './constants/Theme';
-import { View } from 'react-native';
-import Toast from 'react-native-toast-message';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();

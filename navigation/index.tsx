@@ -24,6 +24,7 @@ function RootNavigator() {
     useEffect(
         () =>
             Toast.show({
+                type: 'info',
                 position: 'top',
                 text1: `Welcome to our Mobile Scanning app!`,
                 text2: 'Use the blue scan button below to get started',

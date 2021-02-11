@@ -1,3 +1,5 @@
+import { NavigatorScreenParams } from '@react-navigation/native';
+
 // NAVIGATION
 export type RootStackParamList = {
     Root: undefined;
@@ -5,8 +7,8 @@ export type RootStackParamList = {
 };
 
 export type BottomTabsParamList = {
-    Email: undefined;
-    Scan: undefined;
+    Email: NavigatorScreenParams<EmailStackParamList>;
+    Scan: NavigatorScreenParams<ScanStackParamList>;
 };
 
 export type EmailStackParamList = {

@@ -28,6 +28,7 @@ export function setEmailLoading(loading: boolean): Action {
 
 export function removeScans(scanIds: number[]): Action {
     Toast.show({
+        type: 'success',
         text1: `${scanIds.length} items deleted`,
     });
     return { type: 'REMOVE_SCANS', scanIds };

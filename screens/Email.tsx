@@ -47,6 +47,7 @@ export default function EmailScreen(props: Props) {
                 props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
                 props.navigation.navigate('Email', { screen: 'EmailHistory' });
                 Toast.show({
+                    type: 'success',
                     text1: 'Success! Email sent.',
                     visibilityTime: 5000,
                 });
