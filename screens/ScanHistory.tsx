@@ -1,12 +1,11 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 
 import NewScanButton from '../components/NewScanButton';
-import { Text, View } from '../components/Themed';
 import { AppState, ScanStackParamList } from '../types';
 import ScanRecordListItem from '../components/ScanRecordListItem';
 import ScanHistoryActions from '../components/ScanHistoryActions';

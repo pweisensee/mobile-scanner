@@ -1,4 +1,3 @@
-import { Theme as ThemeType } from '@react-navigation/native/lib/typescript/src/types';
 import Colors from './Colors';
 
 const Theme = {

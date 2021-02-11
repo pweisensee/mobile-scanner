@@ -1,13 +1,12 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Input } from 'react-native-elements';
 import isEmail from 'validator/lib/isEmail';
 import Toast from 'react-native-easy-toast';
 
-import { Text, View } from '../components/Themed';
 import { AppState, ScanStackParamList } from '../types';
 import Separator from '../components/Separator';
 import { sendGridEmail } from '../modules/sendgrid';

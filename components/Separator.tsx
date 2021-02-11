@@ -1,10 +1,8 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-
-import { View } from '../components/Themed';
+import { StyleSheet, View } from 'react-native';
 
 export default function Separator() {
-    return <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />;
+    return <View style={styles.separator} />;
 }
 
 const styles = StyleSheet.create({
@@ -12,5 +10,6 @@ const styles = StyleSheet.create({
         marginVertical: 30,
         height: 1,
         width: '80%',
+        color: '#eee',
     },
 });
