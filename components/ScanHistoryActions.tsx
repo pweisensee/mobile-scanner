@@ -1,10 +1,12 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Icon } from 'react-native-elements';
 import { Dispatch } from 'redux';
 import Toast from 'react-native-toast-message';
 
 import { removeScans } from '../modules/actions';
+import Colors from '../constants/Colors';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
     dispatch: Dispatch<any>;
@@ -25,8 +27,13 @@ export default function ScanHistoryActions(props: Props) {
             {selectMode ? (
                 <>
                     <Button
-                        containerStyle={[{ paddingRight: 10 }]}
-                        type="outline"
+                        containerStyle={[{ paddingHorizontal: 1 }]}
+                        type="clear"
+                        icon={{
+                            color: Colors.light.text,
+                            name: 'close',
+                            type: 'material-community',
+                        }}
                         onPress={() => {
                             navigation.setParams({ selectedScanIds: [], selectMode: false });
                             Toast.show({
@@ -34,27 +41,25 @@ export default function ScanHistoryActions(props: Props) {
                                 visibilityTime: 2500,
                             });
                         }}
-                        title="Cancel"
                     />
                     <Button
-                        buttonStyle={[{ backgroundColor: 'red' }]}
+                        containerStyle={[{ paddingHorizontal: 1 }]}
+                        type="clear"
                         icon={{
-                            color: 'white',
+                            color: 'red',
                             name: 'delete-forever',
                             type: 'material-community',
                         }}
                         onPress={deleteScans}
-                        title="Delete"
                     />
                     <Button
-                        containerStyle={[{ marginHorizontal: 10 }]}
+                        containerStyle={[{ paddingHorizontal: 1, paddingRight: 10 }]}
+                        type="clear"
                         icon={{
-                            color: 'white',
                             name: 'email-outline',
                             type: 'material-community',
                         }}
                         onPress={() => navigation.navigate('Email', { selectedScanIds })}
-                        title="Email"
                     />
                 </>
             ) : null}
