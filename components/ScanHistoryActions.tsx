@@ -1,12 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Icon } from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import { Dispatch } from 'redux';
 import Toast from 'react-native-toast-message';
 
 import { removeScans } from '../modules/actions';
 import Colors from '../constants/Colors';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
     dispatch: Dispatch<any>;
@@ -20,7 +19,6 @@ export default function ScanHistoryActions(props: Props) {
 
     // delete scans from redux
     const deleteScans = () => dispatch(removeScans(selectedScanIds));
-    console.log(`${selectedScanIds.length} items selected`);
 
     return (
         <View style={styles.rowContainer}>

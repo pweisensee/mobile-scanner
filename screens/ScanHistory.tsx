@@ -80,13 +80,15 @@ export default function ScanHistoryScreen(props: Props) {
             ) : (
                 <View
                     style={{
-                        flex: 0.3,
+                        alignItems: 'center',
+                        flex: 0.5,
                         justifyContent: 'space-evenly',
                         marginVertical: 50,
                     }}
                 >
-                    <Text>No scans yet. Just tap below to start scanning! </Text>
-                    <Icon name="arrow-downward" type="material" />
+                    <Text style={styles.message}>No scans yet.</Text>
+                    <Text style={styles.title}>Just tap below to start scanning!</Text>
+                    <Icon name="arrow-downward" size={40} type="material" />
                 </View>
             )}
             <NewScanButton onPress={() => props.navigation.navigate('Scan')} />
@@ -98,6 +100,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    message: { fontSize: 17 },
     title: {
         fontSize: 20,
         fontWeight: 'bold',

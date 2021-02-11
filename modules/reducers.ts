@@ -2,6 +2,8 @@
 import { Action, AppState } from '../types';
 
 export const initialState: AppState = {
+    emails: [],
+    emailActivityLoading: false,
     error: '',
     loading: false,
     scans: [],
@@ -17,6 +19,9 @@ export default function appReducers(state: AppState = initialState, action: Acti
         case 'SET_LOADING': {
             return { ...state, loading: action.loading };
         }
+        case 'SET_EMAIL_ACTIVITY_LOADING': {
+            return { ...state, emailActivityLoading: action.loading };
+        }
         case 'ADD_SCAN': {
             return { ...state, scans: [action.scan, ...state.scans] };
         }
@@ -30,6 +35,21 @@ export default function appReducers(state: AppState = initialState, action: Acti
             });
 
             return { ...state, scans: [...currentScans] };
+        }
+        case 'UPDATE_EMAIL_ACTIVITY': {
+            const latestEmails = action.emails;
+            const exisitingEmails = state.emails.filter(
+                (origEmail) =>
+                    latestEmails.findIndex((newEmail) => newEmail.msg_id === origEmail.msg_id) < 0
+            );
+            const allEmails = latestEmails
+                .concat(exisitingEmails)
+                .sort(
+                    (a, b) =>
+                        new Date(b.last_event_time).valueOf() -
+                        new Date(a.last_event_time).valueOf()
+                );
+            return { ...state, emailActivityLoading: false, emails: allEmails };
         }
         default:
             return state;

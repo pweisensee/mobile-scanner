@@ -1,5 +1,6 @@
 import Constants from 'expo-constants';
 import { SENDGRID_API_KEY } from '@env';
+import { EmailActivityResponse } from '../types';
 
 const CONFIG = {
     ACTIVITY_URL: 'https://api.sendgrid.com/v3/messages',
@@ -8,10 +9,6 @@ const CONFIG = {
     FROM_EMAIL: 'team+sendgrid@synergetx.io',
     SEND_URL: 'https://api.sendgrid.com/v3/mail/send',
 };
-
-export function getEmailActivity(): Promise<false | string[]> {
-    return getActivity();
-}
 
 export function sendGridEmail(
     to: string,
@@ -22,17 +19,17 @@ export function sendGridEmail(
     return sendEmail(CONFIG.API_KEY, to, CONFIG.FROM_EMAIL, subject, body, type);
 }
 
-function getActivity(): Promise<false | string[]> {
-    return fetch(`${CONFIG.SEND_URL}?unique_args=${CONFIG.CUSTOM_ARG}`, {
+export function getEmailActivity(): Promise<false | EmailActivityResponse> {
+    const filterArgs = encodeURI(`query=(unique_args['installationId']="${CONFIG.CUSTOM_ARG}")`);
+    const FETCH_URL = `${CONFIG.ACTIVITY_URL}?limit=50&${filterArgs}`;
+
+    return fetch(`${FETCH_URL}`, {
         method: 'GET',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + CONFIG.API_KEY,
-        },
+        headers: { Authorization: 'Bearer ' + CONFIG.API_KEY },
     })
-        .then((response) => {
-            return response.ok ? response.json() : false;
+        .then(async (response) => {
+            const json = await response.json();
+            return response.ok ? json : false;
         })
         .catch((error) => {
             return false;
@@ -63,6 +60,9 @@ function sendEmail(
                         },
                     ],
                     subject: subject,
+                    custom_args: {
+                        installationId: CONFIG.CUSTOM_ARG,
+                    },
                 },
             ],
             from: {
@@ -74,7 +74,6 @@ function sendEmail(
                     value: body,
                 },
             ],
-            custom_args: CONFIG.CUSTOM_ARG,
         }),
     })
         .then((response) => {
