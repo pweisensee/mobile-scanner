@@ -30,29 +30,17 @@ export default function ScanRecordListItem(props: Props) {
     };
 
     return (
-        <ListItem
-            bottomDivider
-            style={{ display: 'flex', flexDirection: 'row', backgroundColor: 'red', width: '100%' }}
-        >
-            <ListItem.CheckBox
-                style={{ flex: 1 }}
-                checked={isSelected}
-                onPress={() => toggleSelected(id)}
-            />
-            <TouchableOpacity onPress={onPress()}>
-                <ListItem.Content style={{ backgroundColor: 'green', flex: 8 }}>
+        <ListItem bottomDivider style={{ flex: 10 }}>
+            <ListItem.CheckBox checked={isSelected} onPress={() => toggleSelected(id)} />
+            <TouchableOpacity onPress={onPress()} containerStyle={{ flex: 8 }}>
+                <ListItem.Content>
                     <ListItem.Title style={isLink ? styles.title : undefined}>
                         {data}
                     </ListItem.Title>
                     <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
                 </ListItem.Content>
             </TouchableOpacity>
-            <Icon
-                style={{ flex: 1 }}
-                name="share"
-                type="entypo"
-                onPress={() => toggleSelected(id)}
-            />
+            <Icon name="share" type="entypo" onPress={() => toggleSelected(id)} />
         </ListItem>
     );
 }
