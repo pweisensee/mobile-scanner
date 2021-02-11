@@ -43,6 +43,8 @@ export default function EmailScreen(props: Props) {
             const success = await sendGridEmail(toAddress, SUBJECT, body);
             setEmailSending(false);
             if (success) {
+                // blow out selected scans
+                props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
                 props.navigation.navigate('Email', { screen: 'EmailHistory' });
                 Toast.show({
                     text1: 'Success! Email sent.',
