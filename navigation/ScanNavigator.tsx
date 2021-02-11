@@ -19,7 +19,7 @@ export default function ScanNavigator() {
             />
             <ScanStack.Screen name="Scan" component={ScanScreen} options={{ headerShown: false }} />
             <ScanStack.Screen
-                name="Email"
+                name="SendEmail"
                 component={EmailScreen}
                 options={{ headerTitle: 'Email', headerTitleStyle: { color: Colors.light.text } }}
             />

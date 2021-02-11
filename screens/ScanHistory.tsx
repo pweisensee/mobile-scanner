@@ -4,12 +4,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
+import Toast from 'react-native-toast-message';
 
 import NewScanButton from '../components/NewScanButton';
 import { AppState, ScanStackParamList } from '../types';
 import ScanRecordListItem from '../components/ScanRecordListItem';
 import ScanHistoryActions from '../components/ScanHistoryActions';
-import Toast from 'react-native-toast-message';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'ScanHistory'> {}
 

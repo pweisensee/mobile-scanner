@@ -1,19 +1,19 @@
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Input } from 'react-native-elements';
 import isEmail from 'validator/lib/isEmail';
+import Toast from 'react-native-toast-message';
 
 import { AppState, ScanStackParamList } from '../types';
 import Separator from '../components/Separator';
 import { sendGridEmail } from '../modules/sendgrid';
-import Toast from 'react-native-toast-message';
 
 const SUBJECT = 'QR Scan Contents';
 
-interface Props extends StackScreenProps<ScanStackParamList, 'Email'> {}
+interface Props extends StackScreenProps<ScanStackParamList, 'SendEmail'> {}
 
 export default function EmailScreen(props: Props) {
     const { route } = props;
@@ -27,6 +27,8 @@ export default function EmailScreen(props: Props) {
     // customize to email address
     const [errorMessage, setErrorMessage] = useState<string>('');
     // customize to email address
+    const [emailSending, setEmailSending] = useState<boolean>(false);
+    // customize to email address
     const [toAddress, setToAddress] = useState<string>('');
     const body = currentScans
         .filter((scan) => selectedScanIds.indexOf(scan.id) > -1)
@@ -36,8 +38,11 @@ export default function EmailScreen(props: Props) {
     const sendEmail = async () => {
         if (isEmail(toAddress) && body.length) {
             setErrorMessage('');
+            setEmailSending(true);
             const success = await sendGridEmail(toAddress, SUBJECT, body);
+            setEmailSending(false);
             if (success) {
+                props.navigation.navigate('Email', { screen: 'EmailHistory' });
                 Toast.show({
                     text1: 'Success! Email sent.',
                     visibilityTime: 5000,
@@ -61,9 +66,11 @@ export default function EmailScreen(props: Props) {
                 />
                 {errorMessage.length ? <Message error={true} message={errorMessage} /> : null}
                 <Button
+                    disabled={emailSending}
+                    loading={emailSending}
                     icon={{ color: 'white', name: 'send', type: 'font-awesome' }}
-                    title="Send Email"
-                    onPress={sendEmail}
+                    onPress={emailSending ? undefined : sendEmail}
+                    title={emailSending ? undefined : 'Send Email'}
                 />
 
                 <Separator />

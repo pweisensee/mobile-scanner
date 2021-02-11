@@ -8,7 +8,7 @@ export default {
                 screens: {
                     Scan: {
                         screens: {
-                            Email: 'Email',
+                            Email: 'SendEmail',
                             ScanHistory: 'ScanHistory',
                             Scan: 'Scan',
                         },

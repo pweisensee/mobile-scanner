@@ -18,7 +18,7 @@ export default function MainNavigator() {
                     if (route.name === 'Scan') {
                         iconName = 'magnify-scan';
                     } else if (route.name === 'Email') {
-                        iconName = 'email-search';
+                        iconName = 'email-outline';
                     }
 
                     // You can return any component that you like here!

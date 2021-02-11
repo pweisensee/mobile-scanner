@@ -14,7 +14,7 @@ export type EmailStackParamList = {
 };
 
 export type ScanStackParamList = {
-    Email: { selectedScanIds?: number[] };
+    SendEmail: { selectedScanIds?: number[] };
     Scan: undefined;
     ScanHistory: { selectedScanIds?: number[]; selectMode?: boolean };
 };

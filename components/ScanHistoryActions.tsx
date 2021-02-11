@@ -6,10 +6,12 @@ import Toast from 'react-native-toast-message';
 
 import { removeScans } from '../modules/actions';
 import Colors from '../constants/Colors';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { ScanStackParamList } from '../types';
 
 type Props = {
     dispatch: Dispatch<any>;
-    navigation: any;
+    navigation: StackNavigationProp<ScanStackParamList, 'ScanHistory'>;
     selectedScanIds: number[];
     selectMode: boolean;
 };
@@ -54,10 +56,10 @@ export default function ScanHistoryActions(props: Props) {
                         containerStyle={[{ paddingHorizontal: 1, paddingRight: 10 }]}
                         type="clear"
                         icon={{
-                            name: 'email-outline',
-                            type: 'material-community',
+                            name: 'send',
+                            type: 'font-awesome',
                         }}
-                        onPress={() => navigation.navigate('Email', { selectedScanIds })}
+                        onPress={() => navigation.navigate('SendEmail', { selectedScanIds })}
                     />
                 </>
             ) : null}
