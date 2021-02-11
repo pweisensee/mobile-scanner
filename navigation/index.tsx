@@ -25,7 +25,7 @@ function RootNavigator() {
         () =>
             Toast.show({
                 position: 'top',
-                text1: `Wecome to our Mobile Scanning demo app!`,
+                text1: `Welcome to our Mobile Scanning app!`,
                 text2: 'Use the blue scan button below to get started',
                 visibilityTime: 4000,
             }),
