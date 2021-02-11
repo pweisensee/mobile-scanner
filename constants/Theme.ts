@@ -5,6 +5,8 @@ const Theme = {
     colors: Colors,
     Icon: { color: Colors.light.primary },
     Button: { color: Colors.light.primary },
+    Text: { color: Colors.light.text },
+    ListItemTitle: { color: Colors.light.text },
 };
 
 export default Theme;

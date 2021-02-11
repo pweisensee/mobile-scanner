@@ -44,7 +44,7 @@ export default function ScanHistoryScreen(props: Props) {
     const toggleSelection = (id: number) => {
         const index = selectedScanIds.indexOf(id);
 
-        // notify users about UI features
+        // notify users about UI features only if they selected more items than previously selected
         if (selectedScanIds.length === 0 || index < 0) {
             Toast.show({
                 text1: `${selectedScanIds.length + 1} item selected`,

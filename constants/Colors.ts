@@ -11,7 +11,7 @@ const Pallette: {
     background: '#fff',
     primary: primary,
     card: primary,
-    text: '#000',
+    text: '#525252',
     border: primary,
     notification: primary,
 };

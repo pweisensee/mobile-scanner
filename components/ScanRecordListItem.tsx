@@ -5,6 +5,7 @@ import { colors, Icon, ListItem } from 'react-native-elements';
 
 import { ScanRecord } from '../types';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import Colors from '../constants/Colors';
 
 type Props = {
     isSelected: boolean;
@@ -34,7 +35,7 @@ export default function ScanRecordListItem(props: Props) {
             <ListItem.CheckBox checked={isSelected} onPress={() => toggleSelected(id)} />
             <TouchableOpacity onPress={onPress()} containerStyle={{ flex: 8 }}>
                 <ListItem.Content>
-                    <ListItem.Title style={isLink ? styles.title : undefined}>
+                    <ListItem.Title style={isLink ? styles.title : { color: Colors.light.text }}>
                         {data}
                     </ListItem.Title>
                     <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
