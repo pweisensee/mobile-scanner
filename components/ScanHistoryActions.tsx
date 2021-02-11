@@ -20,7 +20,12 @@ export default function ScanHistoryActions(props: Props) {
     const { dispatch, navigation, selectedScanIds, selectMode } = props;
 
     // delete scans from redux
-    const deleteScans = () => dispatch(removeScans(selectedScanIds));
+    const deleteScans = () => {
+        dispatch(removeScans(selectedScanIds));
+
+        // blow out selected scans
+        props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
+    };
 
     return (
         <View style={styles.rowContainer}>
