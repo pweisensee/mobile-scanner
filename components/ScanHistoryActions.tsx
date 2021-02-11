@@ -64,7 +64,10 @@ export default function ScanHistoryActions(props: Props) {
                             name: 'send',
                             type: 'font-awesome',
                         }}
-                        onPress={() => navigation.navigate('SendEmail', { selectedScanIds })}
+                        onPress={() => {
+                            Toast.hide();
+                            navigation.navigate('SendEmail', { selectedScanIds });
+                        }}
                     />
                 </>
             ) : null}
