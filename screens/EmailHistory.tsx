@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
-import { Text, View } from '../components/Themed';
 import { EmailStackParamList } from '../types';
 
 interface Props extends StackScreenProps<EmailStackParamList, 'EmailHistory'> {}

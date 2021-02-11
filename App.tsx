@@ -6,13 +6,13 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingIndicator from './components/LoadingIndicator';
-import { View } from './components/Themed';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { persistor, store } from './modules/store';
 import { ThemeProvider } from 'react-native-elements';
 import Theme from './constants/Theme';
+import { View } from 'react-native';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
