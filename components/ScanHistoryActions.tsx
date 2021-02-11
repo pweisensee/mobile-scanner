@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { Dispatch } from 'redux';
+import Toast from 'react-native-toast-message';
 
 import { removeScans } from '../modules/actions';
 
@@ -26,9 +27,13 @@ export default function ScanHistoryActions(props: Props) {
                     <Button
                         containerStyle={[{ paddingRight: 10 }]}
                         type="outline"
-                        onPress={() =>
-                            navigation.setParams({ selectedScanIds: [], selectMode: false })
-                        }
+                        onPress={() => {
+                            navigation.setParams({ selectedScanIds: [], selectMode: false });
+                            Toast.show({
+                                text1: `All selections cancelled`,
+                                visibilityTime: 2500,
+                            });
+                        }}
                         title="Cancel"
                     />
                     <Button

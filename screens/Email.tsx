@@ -71,14 +71,6 @@ export default function EmailScreen(props: Props) {
                 <Text style={[styles.title]}>Email Contents:</Text>
 
                 <Message message={body} />
-                <Toast
-                    fadeInDuration={250}
-                    opacity={0.95}
-                    position="top"
-                    ref={toastRef}
-                    // @ts-ignore
-                    style={styles.toast}
-                />
             </ScrollView>
         </View>
     );
