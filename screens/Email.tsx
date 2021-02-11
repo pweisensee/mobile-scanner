@@ -10,6 +10,7 @@ import Toast from 'react-native-toast-message';
 import { AppState, ScanStackParamList } from '../types';
 import Separator from '../components/Separator';
 import { sendGridEmail } from '../modules/sendgrid';
+import Colors from '../constants/Colors';
 
 const SUBJECT = 'QR Scan Contents';
 
@@ -74,9 +75,7 @@ export default function EmailScreen(props: Props) {
                 />
 
                 <Separator />
-
                 <Text style={[styles.title]}>Email Contents:</Text>
-
                 <Message message={body} />
             </ScrollView>
         </View>
@@ -99,9 +98,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 20,
     },
-    messageContainer: { backgroundColor: '#61616155', padding: 10, borderRadius: 5 },
+    messageContainer: {
+        backgroundColor: '#61616155',
+        color: Colors.light.text,
+        padding: 10,
+        borderRadius: 5,
+    },
     scrollContainer: { paddingHorizontal: 30 },
     title: {
+        color: Colors.light.text,
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,

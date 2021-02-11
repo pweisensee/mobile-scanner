@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon, ListItem } from 'react-native-elements';
 import ago from 's-ago';
+import Colors from '../constants/Colors';
 
 import { EmailActivityRecord } from '../types';
 
@@ -16,7 +17,7 @@ export default function EmailListItem(props: Props) {
         <ListItem bottomDivider>
             {StatusIcon(status)}
             <ListItem.Content>
-                <ListItem.Title>{subject}</ListItem.Title>
+                <ListItem.Title style={{ color: Colors.light.text }}>{subject}</ListItem.Title>
                 <ListItem.Subtitle>{`To: ${to_email}`}</ListItem.Subtitle>
                 {lastActivity ? (
                     <ListItem.Subtitle>{`Activity: ${lastActivity}`}</ListItem.Subtitle>
