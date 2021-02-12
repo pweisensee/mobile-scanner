@@ -8,17 +8,21 @@ React Native application for using the device’s camera to scan QR codes and st
 
 ### App starts empty, just start scanning to see it in action.
 
-<img src="./docs/empty_scan_screen.jpg" width="350">
-<img src="./docs/empty_email_tab.jpg" width="350">
+<p float="left">
+    <img src="./docs/empty_scan_screen.jpg" width="350">
+    <img src="./docs/empty_email_tab.jpg" width="350">
+</p>
 
 <br/>
 <br/>
 
 ### Scan some QR Codes:
 
-<img src="./docs/active_scan.jpg" width="350">
-<img src="./docs/first_scan.jpg" width="350">
-<img src="./docs/many_scans.jpg" width="350">
+<p float="left">
+    <img src="./docs/active_scan.jpg" width="250">
+    <img src="./docs/first_scan.jpg" width="250">
+    <img src="./docs/many_scans.jpg" width="250">
+</p>
 
 <br/>
 <br/>
@@ -32,8 +36,10 @@ React Native application for using the device’s camera to scan QR codes and st
 
 ### Tap `Send Email` to send:
 
-<img src="./docs/send_email_test_address.jpg" width="350">
-<img src="./docs/email_sent.jpg" width="350">
+<p float="left">
+    <img src="./docs/send_email_test_address.jpg" width="350">
+    <img src="./docs/email_sent.jpg" width="350">
+</p>
 
 <br/>
 <br/>
