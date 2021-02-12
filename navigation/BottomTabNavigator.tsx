@@ -28,7 +28,7 @@ export default function MainNavigator() {
                 },
             })}
             tabBarOptions={{
-                activeTintColor: '#1c5ce9',
+                activeTintColor: '#0080db',
                 inactiveTintColor: 'gray',
             }}
         >

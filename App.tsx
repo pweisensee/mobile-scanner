@@ -10,20 +10,18 @@ import Toast from 'react-native-toast-message';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingIndicator from './components/LoadingIndicator';
 import useCachedResources from './hooks/useCachedResources';
-import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import { persistor, store } from './modules/store';
 import Theme from './constants/Theme';
 
 export default function App() {
     const isLoadingComplete = useCachedResources();
-    const colorScheme = useColorScheme();
 
     const renderApp = (hydrated: boolean) => {
         if (hydrated) {
             return (
                 <ErrorBoundary location={`App Level`}>
-                    <Navigation colorScheme={colorScheme} />
+                    <Navigation />
                     <StatusBar />
                     <Toast ref={(ref) => Toast.setRef(ref)} position={'bottom'} />
                 </ErrorBoundary>

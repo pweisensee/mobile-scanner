@@ -8,7 +8,11 @@ const CONFIG = {
     CUSTOM_ARG: Constants.installationId,
     FROM_EMAIL: 'team+sendgrid@synergetx.io',
     SEND_URL: 'https://api.sendgrid.com/v3/mail/send',
+    SUBJECT: 'QR Scan Contents',
 };
+
+// make unique email subject relative to the current device
+export const getNewEmailSubject = () => `${CONFIG.SUBJECT} [${Date.now()}]`;
 
 export function sendGridEmail(
     to: string,

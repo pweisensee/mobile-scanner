@@ -5,23 +5,23 @@ import EmailScreen from '../screens/Email';
 import ScanHistoryScreen from '../screens/ScanHistory';
 import ScanScreen from '../screens/Scan';
 import { ScanStackParamList } from '../types';
-import Colors from '../constants/Colors';
+import { DEFAULT_OPTIONS } from './navigationConstants';
 
 const ScanStack = createStackNavigator<ScanStackParamList>();
 
 export default function ScanNavigator() {
     return (
-        <ScanStack.Navigator>
+        <ScanStack.Navigator screenOptions={DEFAULT_OPTIONS}>
             <ScanStack.Screen
                 name="ScanHistory"
                 component={ScanHistoryScreen}
-                options={{ headerTitle: 'Scans', headerTitleStyle: { color: Colors.light.text } }}
+                options={{ headerTitle: 'Scans' }}
             />
             <ScanStack.Screen name="Scan" component={ScanScreen} options={{ headerShown: false }} />
             <ScanStack.Screen
                 name="SendEmail"
                 component={EmailScreen}
-                options={{ headerTitle: 'Email', headerTitleStyle: { color: Colors.light.text } }}
+                options={{ headerTitle: 'Email' }}
             />
         </ScanStack.Navigator>
     );

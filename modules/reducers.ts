@@ -38,11 +38,21 @@ export default function appReducers(state: AppState = initialState, action: Acti
         }
         case 'UPDATE_EMAIL_ACTIVITY': {
             const latestEmails = action.emails;
+            // collect placeholder emails pending SendGrid response
+            const placeholderEmails = state.emails.filter(
+                (origEmail) =>
+                    origEmail.msg_id === '' &&
+                    latestEmails.findIndex((newEmail) => newEmail.subject === origEmail.subject) < 0
+            );
+            // collect older emails with no recent updates from SendGrid
             const exisitingEmails = state.emails.filter(
                 (origEmail) =>
+                    origEmail.msg_id.length &&
                     latestEmails.findIndex((newEmail) => newEmail.msg_id === origEmail.msg_id) < 0
             );
+
             const allEmails = latestEmails
+                .concat(placeholderEmails)
                 .concat(exisitingEmails)
                 .sort(
                     (a, b) =>

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Icon, ListItem } from 'react-native-elements';
+import { StyleSheet, View } from 'react-native';
+import { ListItem } from 'react-native-elements';
 import ago from 's-ago';
-import Colors from '../constants/Colors';
 
+import Colors from '../constants/Colors';
+import EmailStatusIcon from './EmailStatusIcon';
 import { EmailActivityRecord } from '../types';
 
 type Props = {
@@ -15,36 +17,28 @@ export default function EmailListItem(props: Props) {
 
     return (
         <ListItem bottomDivider>
-            {StatusIcon(status)}
+            <EmailStatusIcon status={status} />
             <ListItem.Content>
                 <ListItem.Title style={{ color: Colors.light.text }}>{subject}</ListItem.Title>
                 <ListItem.Subtitle>{`To: ${to_email}`}</ListItem.Subtitle>
-                {lastActivity ? (
-                    <ListItem.Subtitle>{`Activity: ${lastActivity}`}</ListItem.Subtitle>
-                ) : null}
-            </ListItem.Content>
-            <ListItem.Content>
-                <ListItem.Subtitle>{`Status: ${status}`}</ListItem.Subtitle>
-                <ListItem.Subtitle>{`# Opened: ${opens_count}`}</ListItem.Subtitle>
-                <ListItem.Subtitle>{`# Clicks: ${clicks_count}`}</ListItem.Subtitle>
+                <View style={styles.row}>
+                    <View style={[styles.column, { flex: 2 }]}>
+                        <ListItem.Subtitle>{`Status: ${status}`}</ListItem.Subtitle>
+                        {lastActivity ? (
+                            <ListItem.Subtitle>{`Activity: ${lastActivity}`}</ListItem.Subtitle>
+                        ) : null}
+                    </View>
+                    <View style={styles.column}>
+                        <ListItem.Subtitle>{`# Opened: ${opens_count}`}</ListItem.Subtitle>
+                        <ListItem.Subtitle>{`# Clicks: ${clicks_count}`}</ListItem.Subtitle>
+                    </View>
+                </View>
             </ListItem.Content>
         </ListItem>
     );
 }
 
-function StatusIcon(status: string) {
-    let iconName = 'email-sync';
-    switch (status) {
-        case 'bounced':
-            iconName = 'email-alert-outline';
-            break;
-        case 'delivered':
-            iconName = 'email-check-outline';
-            break;
-
-        default:
-            break;
-    }
-
-    return <Icon name={iconName} type="material-community" />;
-}
+const styles = StyleSheet.create({
+    column: { flex: 1, flexDirection: 'column' },
+    row: { flex: 1, flexDirection: 'row' },
+});

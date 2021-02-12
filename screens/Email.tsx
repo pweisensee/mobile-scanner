@@ -1,7 +1,8 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, Input } from 'react-native-elements';
 import isEmail from 'validator/lib/isEmail';
@@ -9,15 +10,17 @@ import Toast from 'react-native-toast-message';
 
 import { AppState, ScanStackParamList } from '../types';
 import Separator from '../components/Separator';
-import { sendGridEmail } from '../modules/sendgrid';
 import Colors from '../constants/Colors';
-
-const SUBJECT = 'QR Scan Contents';
+import { sendEmail } from '../modules/actions';
+import MessageBox from '../components/MessageBox';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'SendEmail'> {}
 
 export default function EmailScreen(props: Props) {
     const { route } = props;
+    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+    const dispatchSendEmail = async (toEmail: string, content: string) =>
+        dispatch(sendEmail(toEmail, content));
 
     // current scans in Redux
     const selectScans = (state: AppState) => state.scans;
@@ -36,24 +39,32 @@ export default function EmailScreen(props: Props) {
         .map((scanRecord) => scanRecord.data)
         .join('\n\n');
 
-    const sendEmail = async () => {
-        if (isEmail(toAddress) && body.length) {
+    const onSendEmail = async () => {
+        setEmailSending(true);
+        const success: boolean = await dispatchSendEmail(toAddress, body);
+        setEmailSending(false);
+
+        console.log(`dispatchSendEmail success? ${typeof success} ${JSON.stringify(success)}`);
+
+        if (success) {
+            // blow out selected scans
             setErrorMessage('');
-            setEmailSending(true);
-            const success = await sendGridEmail(toAddress, SUBJECT, body);
-            setEmailSending(false);
-            if (success) {
-                // blow out selected scans
-                props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
-                props.navigation.navigate('Email', { screen: 'EmailHistory' });
-                Toast.show({
-                    type: 'success',
-                    text1: 'Success! Email sent.',
-                    visibilityTime: 5000,
-                });
-            } else {
-                setErrorMessage('Whoops! There was an issue sending that email. Try again later.');
-            }
+            props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
+            props.navigation.navigate('Email', { screen: 'EmailHistory' });
+            Toast.show({
+                type: 'success',
+                text1: 'Success! Email sent.',
+                text2: 'Pull to refresh and get the latest email activity.',
+                visibilityTime: 5000,
+            });
+        } else {
+            setErrorMessage('Whoops! There was an issue sending that email. Try again later.');
+        }
+    };
+
+    const validateAndSendEmail = async () => {
+        if (isEmail(toAddress) && body.length) {
+            onSendEmail();
         } else {
             setErrorMessage(`Invalid email address or contents.`);
         }
@@ -63,50 +74,31 @@ export default function EmailScreen(props: Props) {
         <View style={styles.container}>
             <ScrollView style={styles.scrollContainer}>
                 <Input
-                    containerStyle={[{ marginTop: 20 }]}
+                    containerStyle={[styles.emailInput]}
                     keyboardType="email-address"
                     label="Email address"
                     onChangeText={setToAddress}
                 />
-                {errorMessage.length ? <Message error={true} message={errorMessage} /> : null}
+                {errorMessage.length ? <MessageBox error={true} message={errorMessage} /> : null}
                 <Button
                     disabled={emailSending}
                     loading={emailSending}
                     icon={{ color: 'white', name: 'send', type: 'font-awesome' }}
-                    onPress={emailSending ? undefined : sendEmail}
-                    title={emailSending ? undefined : 'Send Email'}
+                    onPress={validateAndSendEmail}
+                    title={'Send Email'}
                 />
 
                 <Separator />
                 <Text style={[styles.title]}>Email Contents:</Text>
-                <Message message={body} />
+                <MessageBox message={body} />
             </ScrollView>
-        </View>
-    );
-}
-
-function Message({ error, message }: { message: string; error?: boolean }) {
-    return (
-        <View style={error ? styles.errorContainer : styles.messageContainer}>
-            <Text>{message}</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: { flex: 1 },
-    errorContainer: {
-        backgroundColor: 'rgba(219, 0, 0, 0.5)',
-        padding: 10,
-        borderRadius: 5,
-        marginBottom: 20,
-    },
-    messageContainer: {
-        backgroundColor: '#61616155',
-        color: Colors.light.text,
-        padding: 10,
-        borderRadius: 5,
-    },
+    emailInput: { marginTop: 20 },
     scrollContainer: { paddingHorizontal: 30 },
     title: {
         color: Colors.light.text,
@@ -114,5 +106,4 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 20,
     },
-    toast: { backgroundColor: '#23af58', padding: 25 },
 });

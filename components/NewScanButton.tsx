@@ -25,7 +25,7 @@ export default function NewScanButton({ onPress }: Props) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        bottom: 70,
+        bottom: 40,
         width: '100%',
     },
     rowContainer: {

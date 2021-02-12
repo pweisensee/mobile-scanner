@@ -61,7 +61,8 @@ export default function ScanScreen(props: Props) {
                 )}
                 {!scanned && (
                     <Button
-                        icon={{ name: 'flip-camera-android', type: 'material' }}
+                        buttonStyle={[styles.flipButton]}
+                        icon={{ color: 'white', name: 'flip-camera-android', type: 'material' }}
                         onPress={() => {
                             setCameraType(
                                 cameraType === BarCodeConstants.Type.back
@@ -87,4 +88,5 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    flipButton: { paddingVertical: 10, paddingHorizontal: 20 },
 });

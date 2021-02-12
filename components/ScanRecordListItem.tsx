@@ -1,10 +1,11 @@
 import React from 'react';
 import { openURL } from 'expo-linking';
 import { StyleSheet } from 'react-native';
-import { Icon, ListItem } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ago from 's-ago';
 
 import { ScanRecord } from '../types';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '../constants/Colors';
 
 type Props = {
@@ -30,6 +31,8 @@ export default function ScanRecordListItem(props: Props) {
         }
     };
 
+    const dateAgo = ago(new Date(id));
+
     return (
         <ListItem bottomDivider style={{ flex: 10 }}>
             <ListItem.CheckBox checked={isSelected} onPress={() => toggleSelected(id)} />
@@ -38,7 +41,7 @@ export default function ScanRecordListItem(props: Props) {
                     <ListItem.Title style={isLink ? styles.title : { color: Colors.light.text }}>
                         {data}
                     </ListItem.Title>
-                    <ListItem.Subtitle>{new Date(id).toLocaleString()}</ListItem.Subtitle>
+                    <ListItem.Subtitle>{dateAgo}</ListItem.Subtitle>
                 </ListItem.Content>
             </TouchableOpacity>
         </ListItem>

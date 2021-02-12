@@ -1,7 +1,6 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
-import { ColorSchemeName } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
@@ -10,7 +9,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 
 // export default Root Navigator
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation() {
     return (
         <NavigationContainer linking={LinkingConfiguration} theme={DefaultTheme}>
             <RootNavigator />

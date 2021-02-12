@@ -1,7 +1,6 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { Icon } from 'react-native-elements';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import Toast from 'react-native-toast-message';
@@ -10,6 +9,7 @@ import NewScanButton from '../components/NewScanButton';
 import { AppState, ScanStackParamList } from '../types';
 import ScanRecordListItem from '../components/ScanRecordListItem';
 import ScanHistoryActions from '../components/ScanHistoryActions';
+import ScanPlaceholder from '../components/ScanPlaceholder';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'ScanHistory'> {}
 
@@ -50,6 +50,7 @@ export default function ScanHistoryScreen(props: Props) {
                 type: 'info',
                 text1: `${selectedScanIds.length + 1} item selected`,
                 text2: 'Use the action buttons in the top right to delete or email',
+                visibilityTime: 1500,
             });
         } else if (index > -1) {
             // item has been removed from selection, close toast to mimize confusion
@@ -66,9 +67,9 @@ export default function ScanHistoryScreen(props: Props) {
 
     return (
         <View style={styles.container}>
-            {currentScans?.length ? (
-                <ScrollView>
-                    {currentScans.map((item, index) => (
+            <ScrollView>
+                {currentScans?.length ? (
+                    currentScans.map((item, index) => (
                         <ScanRecordListItem
                             key={index}
                             isSelected={selectedScanIds.indexOf(item.id) > -1}
@@ -76,22 +77,11 @@ export default function ScanHistoryScreen(props: Props) {
                             selectMode={selectMode}
                             toggleSelected={toggleSelection}
                         />
-                    ))}
-                </ScrollView>
-            ) : (
-                <View
-                    style={{
-                        alignItems: 'center',
-                        flex: 0.5,
-                        justifyContent: 'space-evenly',
-                        marginVertical: 50,
-                    }}
-                >
-                    <Text style={styles.message}>No scans yet.</Text>
-                    <Text style={styles.title}>Just tap below to start scanning!</Text>
-                    <Icon name="arrow-downward" size={40} type="material" />
-                </View>
-            )}
+                    ))
+                ) : (
+                    <ScanPlaceholder />
+                )}
+            </ScrollView>
             <NewScanButton onPress={() => props.navigation.navigate('Scan')} />
         </View>
     );
@@ -100,10 +90,5 @@ export default function ScanHistoryScreen(props: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    },
-    message: { fontSize: 17 },
-    title: {
-        fontSize: 20,
-        fontWeight: 'bold',
     },
 });
