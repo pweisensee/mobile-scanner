@@ -28,6 +28,7 @@
                 "foregroundImage": "./assets/images/adaptive-icon.png",
                 "backgroundColor": "#FFFFFF"
             },
+            "package": "com.synergetx.mobilescanner",
             "permissions": ["CAMERA"]
         },
         "web": {
