@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware, Store } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import reducers, { initialState } from './reducers';
 import { AppState, Action } from '../types';
