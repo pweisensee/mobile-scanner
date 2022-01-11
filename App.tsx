@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -21,9 +22,11 @@ export default function App() {
         if (hydrated) {
             return (
                 <ErrorBoundary location={`App Level`}>
-                    <Navigation />
-                    <StatusBar />
-                    <Toast ref={(ref) => Toast.setRef(ref)} position={'bottom'} />
+                    <GestureHandlerRootView style={styles.container}>
+                        <Navigation />
+                        <StatusBar />
+                        <Toast ref={(ref) => Toast.setRef(ref)} position={'bottom'} />
+                    </GestureHandlerRootView>
                 </ErrorBoundary>
             );
         }
@@ -52,3 +55,7 @@ export default function App() {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    container: { flex: 1 },
+});
