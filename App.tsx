@@ -47,6 +47,7 @@ export default function App() {
                         <PersistGate
                             loading={null}
                             persistor={persistor}
+                            // @ts-ignore
                             children={(hydrated: boolean) => renderApp(hydrated)}
                         />
                     </ThemeProvider>

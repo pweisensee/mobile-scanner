@@ -26,7 +26,9 @@ export default class ErrorBoundary extends Component<Props, State> {
                 const currentErrorString = `An error has been caught by the SimpleErrorBoundary: ${stateErrorString}`;
                 console.warn(currentErrorString);
             } catch (caughtError) {
-                console.log(`SimpleErrorBoundary caughtError: ${caughtError.message}`);
+                if (caughtError instanceof Error) {
+                    console.log(`SimpleErrorBoundary caughtError: ${caughtError.message}`);
+                }
             }
         });
     }

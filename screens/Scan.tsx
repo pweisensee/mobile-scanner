@@ -61,7 +61,7 @@ export default function ScanScreen(props: Props) {
                 )}
                 {!scanned && (
                     <Button
-                        buttonStyle={[styles.flipButton]}
+                        buttonStyle={styles.flipButton}
                         icon={{ color: 'white', name: 'flip-camera-android', type: 'material' }}
                         onPress={() => {
                             setCameraType(

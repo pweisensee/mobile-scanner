@@ -32,7 +32,7 @@ export default function ScanHistoryActions(props: Props) {
             {selectMode ? (
                 <>
                     <Button
-                        containerStyle={[{ paddingHorizontal: 1 }]}
+                        containerStyle={{ paddingHorizontal: 1 }}
                         type="clear"
                         icon={{
                             color: Colors.light.text,
@@ -49,7 +49,7 @@ export default function ScanHistoryActions(props: Props) {
                         }}
                     />
                     <Button
-                        containerStyle={[{ paddingHorizontal: 1 }]}
+                        containerStyle={{ paddingHorizontal: 1 }}
                         type="clear"
                         icon={{
                             color: 'red',
@@ -59,7 +59,7 @@ export default function ScanHistoryActions(props: Props) {
                         onPress={deleteScans}
                     />
                     <Button
-                        containerStyle={[{ paddingHorizontal: 1, paddingRight: 10 }]}
+                        containerStyle={{ paddingHorizontal: 1, paddingRight: 10 }}
                         type="clear"
                         icon={{
                             name: 'send',

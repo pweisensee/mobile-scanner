@@ -74,7 +74,7 @@ export default function EmailScreen(props: Props) {
         <View style={styles.container}>
             <ScrollView style={styles.scrollContainer}>
                 <Input
-                    containerStyle={[styles.emailInput]}
+                    containerStyle={styles.emailInput}
                     keyboardType="email-address"
                     label="Email address"
                     onChangeText={setToAddress}
@@ -89,7 +89,7 @@ export default function EmailScreen(props: Props) {
                 />
 
                 <Separator />
-                <Text style={[styles.title]}>Email Contents:</Text>
+                <Text style={styles.title}>Email Contents:</Text>
                 <MessageBox message={body} />
             </ScrollView>
         </View>
