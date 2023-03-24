@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { updateEmailActivity } from '../modules/actions';
 import { AppState, EmailStackParamList } from '../types';
@@ -12,7 +13,7 @@ import EmailListPlaceholder from '../components/EmailListPlaceholder';
 interface Props extends StackScreenProps<EmailStackParamList, 'EmailHistory'> {}
 
 export default function EmailHistoryScreen(props: Props) {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
     // current emails in Redux
     const selectEmails = (state: AppState) => state.emails;
     const currentEmails = useSelector(selectEmails);
