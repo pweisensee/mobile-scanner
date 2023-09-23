@@ -43,7 +43,7 @@ export default function App() {
         return (
             <SafeAreaProvider>
                 <Provider store={store}>
-                    <ThemeProvider theme={Theme}>
+                    <ThemeProvider theme={Theme} useDark={false}>
                         <PersistGate
                             loading={null}
                             persistor={persistor}
