@@ -25,7 +25,7 @@ export default function App() {
                     <GestureHandlerRootView style={styles.container}>
                         <Navigation />
                         <StatusBar />
-                        <Toast ref={(ref) => Toast.setRef(ref)} position={'bottom'} />
+                        <Toast position={'bottom'} />
                     </GestureHandlerRootView>
                 </ErrorBoundary>
             );
