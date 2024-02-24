@@ -1,5 +1,5 @@
-import { createStore, compose, applyMiddleware, Store } from 'redux';
-import thunk from 'redux-thunk';
+import { legacy_createStore, compose, applyMiddleware, Store } from 'redux';
+import { thunk } from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -15,7 +15,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
-const store: Store<AppState, Action> = createStore(
+const store: Store<AppState, Action> = legacy_createStore(
     persistedReducer,
     initialState as PersistedAppState,
     compose(applyMiddleware(thunk))
