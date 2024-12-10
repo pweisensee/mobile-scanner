@@ -53,15 +53,14 @@ export default function ScanHistoryScreen(props: Props) {
                 visibilityTime: 1500,
             });
         } else if (index > -1) {
-            // item has been removed from selection, close toast to mimize confusion
+            // item has been removed from selection, close toast to minimize confusion
             Toast.hide();
         }
 
         if (index < 0) {
             setSelectedScans([...selectedScanIds, id]);
         } else {
-            selectedScanIds.splice(index, 1);
-            setSelectedScans([...selectedScanIds]);
+            setSelectedScans(selectedScanIds.filter((scanId) => scanId !== id));
         }
     };
 

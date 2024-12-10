@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { Button } from 'react-native-elements';
 import { StackScreenProps } from '@react-navigation/stack';
-import { BarCodeEvent, BarCodeScanner, Constants as BarCodeConstants } from 'expo-barcode-scanner';
+import { BarcodeScanningResult, CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { canOpenURL } from 'expo-linking';
 import Toast from 'react-native-toast-message';
 
@@ -13,21 +13,15 @@ import { addScan } from '../modules/actions';
 interface Props extends StackScreenProps<ScanStackParamList, 'Scan'> {}
 
 export default function ScanScreen(props: Props) {
-    const [hasPermission, setHasPermission] = useState<boolean | null>(null);
     const [scanned, setScanned] = useState(false);
-    const [cameraType, setCameraType] = useState(BarCodeConstants.Type.back);
+    const [cameraType, setCameraType] = useState<CameraType>('back');
+
+    const [permission, requestPermission] = useCameraPermissions();
 
     const dispatch = useDispatch();
     const saveScan = (newScan: ScanRecord) => dispatch(addScan(newScan));
 
-    useEffect(() => {
-        (async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
-    }, []);
-
-    const handleBarCodeScanned = async ({ type, data }: BarCodeEvent) => {
+    const handleBarCodeScanned = async ({ type, data }: BarcodeScanningResult) => {
         setScanned(true);
         saveScan({ data, id: Date.now(), isLink: await canOpenURL(data), type });
         props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
@@ -40,19 +34,30 @@ export default function ScanScreen(props: Props) {
         });
     };
 
-    if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
-    }
-    if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+    if (!permission) {
+        // Camera permissions are still loading.
+        return (
+            <View>
+                <Text>Requesting for camera permission</Text>
+            </View>
+        );
     }
 
+    if (!permission.granted) {
+        // Camera permissions are not granted yet.
+        return (
+            <View style={styles.container}>
+                <Text>We need your permission to show the camera</Text>
+                <Button onPress={requestPermission} title="grant permission" />
+            </View>
+        );
+    }
     return (
         <View style={styles.container}>
-            <BarCodeScanner
-                type={cameraType}
-                barCodeTypes={[BarCodeConstants.BarCodeType.qr]}
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            <CameraView
+                barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+                facing={cameraType}
+                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
                 style={StyleSheet.absoluteFillObject}
             />
             <View style={styles.buttonContainer}>
@@ -64,11 +69,7 @@ export default function ScanScreen(props: Props) {
                         buttonStyle={styles.flipButton}
                         icon={{ color: 'white', name: 'flip-camera-android', type: 'material' }}
                         onPress={() => {
-                            setCameraType(
-                                cameraType === BarCodeConstants.Type.back
-                                    ? BarCodeConstants.Type.front
-                                    : BarCodeConstants.Type.back
-                            );
+                            setCameraType(cameraType === 'back' ? 'front' : 'back');
                         }}
                         title={'Flip'}
                     />

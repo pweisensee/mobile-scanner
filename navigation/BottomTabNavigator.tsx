@@ -12,6 +12,8 @@ export default function MainNavigator() {
     return (
         <BottomTabs.Navigator
             screenOptions={({ route }) => ({
+                tabBarActiveTintColor: '#0080db',
+                tabBarInactiveTintColor: 'gray',
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName = 'magnify-scan';
 
@@ -27,10 +29,6 @@ export default function MainNavigator() {
                     );
                 },
             })}
-            tabBarOptions={{
-                activeTintColor: '#0080db',
-                inactiveTintColor: 'gray',
-            }}
         >
             <BottomTabs.Screen name="Scan" component={ScanNavigator} />
             <BottomTabs.Screen name="Email" component={EmailNavigator} />

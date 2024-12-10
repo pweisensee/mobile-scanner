@@ -10,14 +10,11 @@ import Toast from 'react-native-toast-message';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingIndicator from './components/LoadingIndicator';
-import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import { persistor, store } from './modules/store';
 import Theme from './constants/Theme';
 
 export default function App() {
-    const isLoadingComplete = useCachedResources();
-
     const renderApp = (hydrated: boolean) => {
         if (hydrated) {
             return (
@@ -37,24 +34,20 @@ export default function App() {
         );
     };
 
-    if (!isLoadingComplete) {
-        return null;
-    } else {
-        return (
-            <SafeAreaProvider>
-                <Provider store={store}>
-                    <ThemeProvider theme={Theme} useDark={false}>
-                        <PersistGate
-                            loading={null}
-                            persistor={persistor}
-                            // @ts-ignore
-                            children={(hydrated: boolean) => renderApp(hydrated)}
-                        />
-                    </ThemeProvider>
-                </Provider>
-            </SafeAreaProvider>
-        );
-    }
+    return (
+        <SafeAreaProvider>
+            <Provider store={store}>
+                <ThemeProvider theme={Theme} useDark={false}>
+                    <PersistGate
+                        loading={null}
+                        persistor={persistor}
+                        // @ts-ignore
+                        children={(hydrated: boolean) => renderApp(hydrated)}
+                    />
+                </ThemeProvider>
+            </Provider>
+        </SafeAreaProvider>
+    );
 }
 
 const styles = StyleSheet.create({

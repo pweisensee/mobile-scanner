@@ -6,11 +6,11 @@
         "description": "Mobile QR Code Scanner and Emailing App",
         "version": "1.0.0",
         "owner": "synergetx",
-        "privacy": "unlisted",
         "orientation": "portrait",
         "icon": "./assets/images/icon.png",
         "userInterfaceStyle": "automatic",
         "platforms": ["ios", "android"],
+        "newArchEnabled": true,
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
@@ -33,6 +33,7 @@
         },
         "web": {
             "favicon": "./assets/images/favicon.png"
-        }
+        },
+        "plugins": ["expo-asset"]
     }
 }
