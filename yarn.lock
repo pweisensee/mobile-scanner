@@ -7163,7 +7163,7 @@ __metadata:
     redux-thunk: ^3.1.0
     s-ago: ^2.2.0
     typescript: ~5.6.3
-    validator: ^13.15.20
+    validator: ^13.15.22
   languageName: unknown
   linkType: soft
 
@@ -8094,10 +8094,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"validator@npm:^13.15.20":
-  version: 13.15.20
-  resolution: "validator@npm:13.15.20"
-  checksum: e8e50470acbc65206fad8ac937cc692278201bb09558176a4100b90cbc7981c475eda69f49b91aee3ae04cff474c8478f672f9c641e4e0a38a9f47371e0fdfb2
+"validator@npm:^13.15.22":
+  version: 13.15.23
+  resolution: "validator@npm:13.15.23"
+  checksum: 7ac57d4c56de04cd831c997f2e06ded4862a4cf8541ac982c7d2a6a6aa10b833af20b64f1b0c6a92bae21698db44b1044f32eb2f2ce50823138ab95d4c4886e9
   languageName: node
   linkType: hard
 
