@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { Button } from 'react-native-elements';
+import { Button } from '@rneui/themed';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BarcodeScanningResult, CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { canOpenURL } from 'expo-linking';
 import Toast from 'react-native-toast-message';
 
 import { ScanStackParamList, ScanRecord } from '../types';
-import { addScan } from '../modules/actions';
+import { addScan } from '../modules/appSlice';
 
 interface Props extends StackScreenProps<ScanStackParamList, 'Scan'> {}
 

@@ -9,7 +9,11 @@ lerna-debug.log*
 # Modules
 node_modules/**/*
 .expo/*
+.expo
+
+# Build output
 web-build/
+*.tsbuildinfo
 
 #Keys
 .env

@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { updateEmailActivity } from '../modules/actions';
+import { updateEmailActivity } from '../modules/appSlice';
 import { AppState, EmailStackParamList } from '../types';
 import EmailListItem from '../components/EmailListItem';
 import Colors from '../constants/Colors';

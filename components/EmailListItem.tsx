@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ListItem } from 'react-native-elements';
-import ago from 's-ago';
+import { ListItem } from '@rneui/themed';
+import { formatDistanceToNow } from 'date-fns';
 
 import Colors from '../constants/Colors';
 import EmailStatusIcon from './EmailStatusIcon';
@@ -13,7 +13,9 @@ type Props = {
 
 export default function EmailListItem(props: Props) {
     const { subject, to_email, status, opens_count, clicks_count, last_event_time } = props.email;
-    const lastActivity = last_event_time ? ago(new Date(last_event_time)) : false;
+    const lastActivity = last_event_time
+        ? formatDistanceToNow(new Date(last_event_time), { addSuffix: true })
+        : false;
 
     return (
         <ListItem bottomDivider>

@@ -1,29 +1,34 @@
 import { StackScreenProps } from '@react-navigation/stack';
+import { CompositeScreenProps } from '@react-navigation/native';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Input } from 'react-native-elements';
-import isEmail from 'validator/lib/isEmail';
+import { Button, Input } from '@rneui/themed';
+import { z } from 'zod';
 import Toast from 'react-native-toast-message';
 
-import { AppState, ScanStackParamList } from '../types';
+import { AppState, ScanStackParamList, BottomTabsParamList } from '../types';
 import Separator from '../components/Separator';
 import Colors from '../constants/Colors';
-import { sendEmail } from '../modules/actions';
+import { sendEmail } from '../modules/appSlice';
 import MessageBox from '../components/MessageBox';
+import { AppDispatch, RootState } from '../modules/store';
 
-interface Props extends StackScreenProps<ScanStackParamList, 'SendEmail'> {}
+type Props = CompositeScreenProps<
+    StackScreenProps<ScanStackParamList, 'SendEmail'>,
+    BottomTabScreenProps<BottomTabsParamList>
+>;
 
 export default function EmailScreen(props: Props) {
-    const { route } = props;
-    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+    const { route, navigation } = props;
+    const dispatch = useDispatch<AppDispatch>();
     const dispatchSendEmail = async (toEmail: string, content: string) =>
         dispatch(sendEmail(toEmail, content));
 
     // current scans in Redux
-    const selectScans = (state: AppState) => state.scans;
+    const selectScans = (state: RootState) => state.scans;
     const currentScans = useSelector(selectScans);
 
     // save selected scan Ids in route params
@@ -49,8 +54,13 @@ export default function EmailScreen(props: Props) {
         if (success) {
             // blow out selected scans
             setErrorMessage('');
-            props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
-            props.navigation.navigate('Email', { screen: 'EmailHistory' });
+            // @ts-ignore
+            navigation.navigate('Scan', {
+                screen: 'ScanHistory',
+                params: { selectedScanIds: [] },
+            });
+            // @ts-ignore
+            navigation.navigate('Email', { screen: 'EmailHistory' });
             Toast.show({
                 type: 'success',
                 text1: 'Success! Email sent.',
@@ -63,7 +73,8 @@ export default function EmailScreen(props: Props) {
     };
 
     const validateAndSendEmail = async () => {
-        if (isEmail(toAddress) && body.length) {
+        const isEmail = z.email().safeParse(toAddress).success;
+        if (isEmail && body.length) {
             onSendEmail();
         } else {
             setErrorMessage(`Invalid email address or contents.`);

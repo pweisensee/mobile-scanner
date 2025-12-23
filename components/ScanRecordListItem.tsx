@@ -1,9 +1,9 @@
 import React from 'react';
 import { openURL } from 'expo-linking';
 import { StyleSheet } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import { ListItem } from '@rneui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import ago from 's-ago';
+import { formatDistanceToNow } from 'date-fns';
 
 import { ScanRecord } from '../types';
 import Colors from '../constants/Colors';
@@ -31,7 +31,7 @@ export default function ScanRecordListItem(props: Props) {
         }
     };
 
-    const dateAgo = ago(new Date(id));
+    const dateAgo = formatDistanceToNow(new Date(id), { addSuffix: true });
 
     return (
         <ListItem bottomDivider style={{ flex: 10 }}>

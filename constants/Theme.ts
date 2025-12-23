@@ -1,12 +1,16 @@
+import { createTheme } from '@rneui/themed';
 import Colors from './Colors';
 
-const Theme = {
-    dark: false, // we've disabled "dark" theming for this app because it's a demo
-    colors: Colors,
-    Icon: { color: Colors.light.primary },
-    Button: { color: Colors.light.primary },
-    Text: { color: Colors.light.text },
-    ListItemTitle: { color: Colors.light.text },
-};
+const Theme = createTheme({
+    lightColors: Colors.light,
+    darkColors: Colors.dark,
+    mode: 'light',
+    components: {
+        Icon: { color: Colors.light.primary },
+        Button: { buttonStyle: { backgroundColor: Colors.light.primary } },
+        Text: { style: { color: Colors.light.text } },
+        ListItemTitle: { style: { color: Colors.light.text } },
+    },
+});
 
 export default Theme;

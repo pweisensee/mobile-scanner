@@ -9,6 +9,7 @@ export type RootStackParamList = {
 export type BottomTabsParamList = {
     Email: NavigatorScreenParams<EmailStackParamList>;
     Scan: NavigatorScreenParams<ScanStackParamList>;
+    ScanHistory: { selectedScanIds?: number[]; selectMode?: boolean };
 };
 
 export type EmailStackParamList = {
@@ -22,14 +23,6 @@ export type ScanStackParamList = {
 };
 
 // REDUX
-export type Action =
-    | { type: 'RESET_STORE' }
-    | { type: 'SET_ERROR'; error: string }
-    | { type: 'SET_LOADING'; loading: boolean }
-    | { type: 'ADD_SCAN'; scan: ScanRecord }
-    | { type: 'SET_EMAIL_ACTIVITY_LOADING'; loading: boolean }
-    | { type: 'UPDATE_EMAIL_ACTIVITY'; emails: EmailActivityRecord[] }
-    | { type: 'REMOVE_SCANS'; scanIds: number[] };
 
 export interface AppState {
     emails: EmailActivityRecord[];
@@ -38,8 +31,6 @@ export interface AppState {
     loading: boolean;
     scans: ScansHistory;
 }
-
-export type GetState = () => AppState;
 
 // APPLICATION DATA
 

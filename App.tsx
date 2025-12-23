@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { ThemeProvider } from 'react-native-elements';
+import { ThemeProvider } from '@rneui/themed';
 import Toast from 'react-native-toast-message';
 
 import ErrorBoundary from './components/ErrorBoundary';
@@ -37,7 +37,7 @@ export default function App() {
     return (
         <SafeAreaProvider>
             <Provider store={store}>
-                <ThemeProvider theme={Theme} useDark={false}>
+                <ThemeProvider theme={Theme}>
                     <PersistGate
                         loading={null}
                         persistor={persistor}

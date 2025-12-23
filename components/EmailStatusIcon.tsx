@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'react-native-elements';
+import { Icon } from '@rneui/themed';
 
 import Colors from '../constants/Colors';
 

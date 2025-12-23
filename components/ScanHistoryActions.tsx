@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button } from '@rneui/themed';
 import { Dispatch } from 'redux';
 import Toast from 'react-native-toast-message';
 
-import { removeScans } from '../modules/actions';
+import { removeScans } from '../modules/appSlice';
 import Colors from '../constants/Colors';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { ScanStackParamList } from '../types';
