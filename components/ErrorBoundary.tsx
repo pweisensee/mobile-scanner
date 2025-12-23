@@ -53,7 +53,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                             <Text style={styles.buttonText}>Close</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={Updates.reloadAsync}
+                            onPress={() => Updates.reloadAsync()}
                             style={[styles.button, styles.red]}
                         >
                             <Text style={styles.buttonText}>Reload app</Text>

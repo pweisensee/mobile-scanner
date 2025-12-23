@@ -1,30 +1,40 @@
-import Constants from 'expo-constants';
+import * as Application from 'expo-application';
+import { Platform } from 'react-native';
 import { SENDGRID_API_KEY } from '@env';
 import { EmailActivityResponse } from '../types';
 
 const CONFIG = {
     ACTIVITY_URL: 'https://api.sendgrid.com/v3/messages',
     API_KEY: SENDGRID_API_KEY,
-    CUSTOM_ARG: Constants.installationId,
     FROM_EMAIL: 'team+sendgrid@synergetx.io',
     SEND_URL: 'https://api.sendgrid.com/v3/mail/send',
     SUBJECT: 'QR Scan Contents',
 };
 
+async function getInstallationId(): Promise<string | null> {
+    if (Platform.OS === 'ios') {
+        return await Application.getIosIdForVendorAsync();
+    } else {
+        return Application.getAndroidId();
+    }
+}
+
 // make unique email subject relative to the current device
 export const getNewEmailSubject = () => `${CONFIG.SUBJECT} [${Date.now()}]`;
 
-export function sendGridEmail(
+export async function sendGridEmail(
     to: string,
     subject: string,
     body: string,
     type: 'text/plain' | 'text/html' = 'text/plain'
 ): Promise<boolean> {
-    return sendEmail(CONFIG.API_KEY, to, CONFIG.FROM_EMAIL, subject, body, type);
+    const installationId = await getInstallationId();
+    return sendEmail(CONFIG.API_KEY, to, CONFIG.FROM_EMAIL, subject, body, type, installationId);
 }
 
-export function getEmailActivity(): Promise<false | EmailActivityResponse> {
-    const filterArgs = encodeURI(`query=(unique_args['installationId']="${CONFIG.CUSTOM_ARG}")`);
+export async function getEmailActivity(): Promise<false | EmailActivityResponse> {
+    const installationId = await getInstallationId();
+    const filterArgs = encodeURI(`query=(unique_args['installationId']="${installationId}")`);
     const FETCH_URL = `${CONFIG.ACTIVITY_URL}?limit=50&${filterArgs}`;
 
     return fetch(`${FETCH_URL}`, {
@@ -46,7 +56,8 @@ function sendEmail(
     from: string,
     subject: string,
     body: string,
-    type: 'text/plain' | 'text/html'
+    type: 'text/plain' | 'text/html',
+    installationId: string | null
 ): Promise<boolean> {
     return fetch(CONFIG.SEND_URL, {
         method: 'POST',
@@ -65,7 +76,7 @@ function sendEmail(
                     ],
                     subject: subject,
                     custom_args: {
-                        installationId: CONFIG.CUSTOM_ARG,
+                        installationId: installationId,
                     },
                 },
             ],

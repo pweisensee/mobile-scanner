@@ -10,7 +10,9 @@
         "icon": "./assets/images/icon.png",
         "userInterfaceStyle": "automatic",
         "platforms": ["ios", "android"],
-        "newArchEnabled": true,
+        "runtimeVersion": {
+            "policy": "sdkVersion"
+        },
         "splash": {
             "image": "./assets/images/splash.png",
             "resizeMode": "contain",
@@ -21,7 +23,8 @@
         },
         "assetBundlePatterns": ["assets/**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.synergetx.mobilescanner"
         },
         "android": {
             "adaptiveIcon": {
@@ -34,6 +37,15 @@
         "web": {
             "favicon": "./assets/images/favicon.png"
         },
-        "plugins": ["expo-asset", "expo-font"]
+        "plugins": [
+            "expo-asset",
+            "expo-font",
+            [
+                "expo-camera",
+                {
+                    "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes."
+                }
+            ]
+        ]
     }
 }
