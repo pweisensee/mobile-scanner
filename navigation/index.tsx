@@ -1,12 +1,14 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { RootStackParamList } from '../types';
-import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import ScanHistoryScreen from '../screens/ScanHistory';
+import ScanScreen from '../screens/Scan';
+import EmailScreen from '../screens/Email';
 
 // export default Root Navigator
 export default function Navigation() {
@@ -17,7 +19,7 @@ export default function Navigation() {
     );
 }
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function RootNavigator() {
     useEffect(
@@ -25,16 +27,33 @@ function RootNavigator() {
             Toast.show({
                 type: 'info',
                 position: 'top',
-                text1: `Welcome to our Mobile Scanning app!`,
-                text2: 'Use the blue scan button below to get started',
+                text1: 'Ready to scan',
+                text2: 'Use the scan button below to get started',
                 visibilityTime: 4000,
             }),
         []
     );
 
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="Root" component={BottomTabNavigator} />
+        <Stack.Navigator
+            initialRouteName="ScanHistory"
+            screenOptions={{
+                contentStyle: { backgroundColor: '#f8fafc' },
+                headerShadowVisible: false,
+                headerTintColor: '#0f172a',
+            }}
+        >
+            <Stack.Screen
+                name="ScanHistory"
+                component={ScanHistoryScreen}
+                options={{ title: 'Scans' }}
+            />
+            <Stack.Screen name="Scan" component={ScanScreen} options={{ headerShown: false }} />
+            <Stack.Screen
+                name="SendEmail"
+                component={EmailScreen}
+                options={{ title: 'Share scans' }}
+            />
             <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
         </Stack.Navigator>
     );

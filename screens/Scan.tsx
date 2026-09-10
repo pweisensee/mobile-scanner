@@ -1,29 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { useDispatch } from 'react-redux';
-import { Button } from '@rneui/themed';
-import { StackScreenProps } from '@react-navigation/stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { BarcodeScanningResult, CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { canOpenURL } from 'expo-linking';
 import Toast from 'react-native-toast-message';
 
-import { ScanStackParamList, ScanRecord } from '../types';
-import { addScan } from '../modules/appSlice';
+import { RootStackParamList, ScanRecord } from '../types';
+import { useScanStore } from '../modules/ScanStore';
+import PrimaryButton from '../components/PrimaryButton';
 
-interface Props extends StackScreenProps<ScanStackParamList, 'Scan'> {}
+type Props = NativeStackScreenProps<RootStackParamList, 'Scan'>;
 
 export default function ScanScreen(props: Props) {
     const [scanned, setScanned] = useState(false);
     const [cameraType, setCameraType] = useState<CameraType>('back');
+    const handlingScan = useRef(false);
+    const { addScan } = useScanStore();
 
     const [permission, requestPermission] = useCameraPermissions();
 
-    const dispatch = useDispatch();
-    const saveScan = (newScan: ScanRecord) => dispatch(addScan(newScan));
-
     const handleBarCodeScanned = async ({ type, data }: BarcodeScanningResult) => {
+        if (handlingScan.current) {
+            return;
+        }
+
+        handlingScan.current = true;
         setScanned(true);
-        saveScan({ data, id: Date.now(), isLink: await canOpenURL(data), type });
+        let isLink = false;
+        try {
+            isLink = await canOpenURL(data);
+        } catch {
+            // Some valid QR contents use schemes that iOS cannot query.
+        }
+
+        const scan: ScanRecord = { data, id: Date.now(), isLink, type };
+        addScan(scan);
         props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
 
         Toast.show({
@@ -37,18 +48,20 @@ export default function ScanScreen(props: Props) {
     if (!permission) {
         // Camera permissions are still loading.
         return (
-            <View>
-                <Text>Requesting for camera permission</Text>
+            <View style={styles.centered}>
+                <Text style={styles.message}>Loading camera…</Text>
             </View>
         );
     }
 
     if (!permission.granted) {
-        // Camera permissions are not granted yet.
         return (
-            <View style={styles.container}>
-                <Text>We need your permission to show the camera</Text>
-                <Button onPress={requestPermission} title="grant permission" />
+            <View style={styles.permissionContainer}>
+                <Text style={styles.permissionTitle}>Camera access is required</Text>
+                <Text style={styles.permissionMessage}>
+                    Mobile Scanner uses the camera only while you scan a QR code.
+                </Text>
+                <PrimaryButton onPress={requestPermission} title="Allow camera access" />
             </View>
         );
     }
@@ -58,20 +71,23 @@ export default function ScanScreen(props: Props) {
                 barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
                 facing={cameraType}
                 onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
+                style={StyleSheet.absoluteFill}
             />
             <View style={styles.buttonContainer}>
                 {scanned && (
-                    <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
+                    <PrimaryButton
+                        icon="qrcode-scan"
+                        title="Scan again"
+                        onPress={() => setScanned(false)}
+                    />
                 )}
                 {!scanned && (
-                    <Button
-                        buttonStyle={styles.flipButton}
-                        icon={{ color: 'white', name: 'flip-camera-android', type: 'material' }}
+                    <PrimaryButton
+                        icon="camera-flip-outline"
                         onPress={() => {
                             setCameraType(cameraType === 'back' ? 'front' : 'back');
                         }}
-                        title={'Flip'}
+                        title="Flip camera"
                     />
                 )}
             </View>
@@ -81,13 +97,39 @@ export default function ScanScreen(props: Props) {
 
 const styles = StyleSheet.create({
     buttonContainer: {
-        bottom: 100,
+        bottom: 54,
         position: 'absolute',
+        width: '80%',
+    },
+    centered: {
+        alignItems: 'center',
+        flex: 1,
+        justifyContent: 'center',
     },
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
-    flipButton: { paddingVertical: 10, paddingHorizontal: 20 },
+    message: { color: '#475569', fontSize: 16 },
+    permissionContainer: {
+        backgroundColor: '#f8fafc',
+        flex: 1,
+        justifyContent: 'center',
+        padding: 28,
+    },
+    permissionMessage: {
+        color: '#64748b',
+        fontSize: 15,
+        lineHeight: 22,
+        marginBottom: 24,
+        textAlign: 'center',
+    },
+    permissionTitle: {
+        color: '#0f172a',
+        fontSize: 22,
+        fontWeight: '700',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
 });

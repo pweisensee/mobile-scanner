@@ -1,76 +1,39 @@
-# mobile-scanner
+# Mobile Scanner
 
-React Native application for using the device’s camera to scan QR codes and store the collected text for further emailing and tracking emails sent.
+An Expo app for scanning QR codes, keeping a private on-device history, opening scanned links, and sharing selected scans through the system email composer.
 
-# ABOUT
+The app does not embed an email-service credential or upload scan history to a server. Existing scan history from the previous Redux Persist store is migrated automatically on first launch.
 
-## Start
+## Requirements
 
-### App starts empty, just start scanning to see it in action.
+- Node.js 22.13 or newer
+- Yarn 4 through Corepack
+- Xcode 26.4 or newer for iOS builds
+- Android SDK 36 for Android builds
 
-<p float="left">
-    <img src="./docs/empty_scan_screen.jpg" width="350">
-    <img src="./docs/empty_email_tab.jpg" width="350">
-</p>
+## Development
 
-<br/>
-<br/>
+```sh
+corepack enable
+yarn install --immutable
+yarn start
+```
 
-### Scan some QR Codes:
+Run the native app locally:
 
-<p float="left">
-    <img src="./docs/active_scan.jpg" width="250">
-    <img src="./docs/first_scan.jpg" width="250">
-    <img src="./docs/many_scans.jpg" width="250">
-</p>
+```sh
+yarn ios
+yarn android
+```
 
-<br/>
-<br/>
+The camera cannot scan a real QR code in the iOS Simulator. Email composition also requires a configured mail account on a physical iOS device; the app falls back to the system share sheet when mail is unavailable.
 
-### Select one or many. Tap <img src="./docs/trash_icon.jpg" width="20"> icon to delete or <img src="./docs/send_email_icon.jpg" width="20"> to send an email:
+## Verification
 
-<img src="./docs/3_scans_selected.jpg" width="350">
+```sh
+yarn validate
+yarn export:ios
+yarn export:android
+```
 
-<br/>
-<br/>
-
-### Tap `Send Email` to send:
-
-<p float="left">
-    <img src="./docs/send_email_test_address.jpg" width="350">
-    <img src="./docs/email_sent.jpg" width="350">
-</p>
-
-<br/>
-<br/>
-
-### Pull-to-refresh on the `Email` tab to get the lastest activity from SendGrid
-
-<img src="./docs/email_history.jpg" width="350">
-
-<br/>
-<br/>
-<br/>
-
-# DEVELOPMENT
-
-### PREREQUISITES
-
--   global npm packages:
-
-    -   `expo-cli`
-    -   `npm`
-    -   `typescript`
-
--   local environment variables for secret keys:
-    -   set `SENDGRID_API_KEY=XXXXX` in the root folder in a `.env` file
-
-### START
-
--   Clear out previous build cache
-    -   `watchman watch-del-all`
-    -   `rm -rf node_modules/.cache/babel-loader/*`
-    -   `rm -fr $TMPDIR/metro*`
--   Run `yarn` to install dependencies
--   Run `yarn start` to start the local Expo server
--   Scan QR code with Expo app on device to preview app
+After changing native dependencies or Expo SDK versions, create fresh iOS and Android builds before publishing an update.

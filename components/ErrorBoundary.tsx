@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import * as Updates from 'expo-updates';
 
 interface Props {
-    children: any;
+    children: React.ReactNode;
     location: string;
 }
 
 interface State {
     error: Error | null;
-    errorInfo: any;
+    errorInfo: React.ErrorInfo | null;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
@@ -22,12 +22,10 @@ export default class ErrorBoundary extends Component<Props, State> {
         // Catch errors in any components below and re-render with error message
         this.setState({ error: error, errorInfo: errorInfo }, () => {
             try {
-                const stateErrorString = this.state.error && this.state.error.toString();
-                const currentErrorString = `An error has been caught by the SimpleErrorBoundary: ${stateErrorString}`;
-                console.warn(currentErrorString);
+                console.warn(`App error: ${this.state.error?.message ?? 'Unknown error'}`);
             } catch (caughtError) {
                 if (caughtError instanceof Error) {
-                    console.log(`SimpleErrorBoundary caughtError: ${caughtError.message}`);
+                    console.warn(`Error boundary logging failed: ${caughtError.message}`);
                 }
             }
         });
@@ -45,9 +43,9 @@ export default class ErrorBoundary extends Component<Props, State> {
                     <Text
                         style={styles.subtitle}
                     >{`Something went wrong in ${this.props.location}.`}</Text>
-                    <Text
-                        style={styles.subtitle}
-                    >{`We've located and logged the issue, sorry for any inconvenience.`}</Text>
+                    <Text style={styles.subtitle}>
+                        Close this message to try again, or reload the app if the problem continues.
+                    </Text>
                     <View style={{ marginVertical: 20, width: '100%' }}>
                         <TouchableOpacity onPress={this.hideError} style={styles.button}>
                             <Text style={styles.buttonText}>Close</Text>
@@ -59,11 +57,6 @@ export default class ErrorBoundary extends Component<Props, State> {
                             <Text style={styles.buttonText}>Reload app</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* {error && error.message ? (
-                        <ScrollView style={styles.scrollView}>
-                            <Text style={styles.warningSection}>{error.message.slice(0, 100)}</Text>
-                        </ScrollView>
-                    ) : null} */}
                 </View>
             );
         }
@@ -93,12 +86,5 @@ const styles = StyleSheet.create({
     },
     subtitle: { fontSize: 16, color: '#1f1f1f', marginBottom: 10, textAlign: 'center' },
     red: { backgroundColor: 'red' },
-    scrollView: { height: 200, marginTop: 15 },
     titleText: { fontSize: 18, color: '#1f1f1f', marginBottom: 20 },
-    warningSection: {
-        backgroundColor: '#EAEB5E',
-        color: '#666804',
-        letterSpacing: 2,
-        textAlign: 'center',
-    },
 });

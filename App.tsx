@@ -1,23 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { ThemeProvider } from '@rneui/themed';
-import Toast from 'react-native-toast-message';
 import * as SplashScreen from 'expo-splash-screen';
+import React, { useCallback } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
 
 import ErrorBoundary from './components/ErrorBoundary';
 import Navigation from './navigation';
-import { persistor, store } from './modules/store';
-import Theme from './constants/Theme';
+import { ScanStoreProvider, useScanStore } from './modules/ScanStore';
 
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
+void SplashScreen.preventAutoHideAsync();
+SplashScreen.setOptions({ duration: 300, fade: true });
 
-function HydratedApp({ hydrated }: { hydrated: boolean }) {
+function HydratedApp() {
+    const { hydrated } = useScanStore();
     const onLayoutRootView = useCallback(async () => {
         if (hydrated) {
             await SplashScreen.hideAsync();
@@ -30,11 +26,11 @@ function HydratedApp({ hydrated }: { hydrated: boolean }) {
 
     return (
         <ErrorBoundary location={`App Level`}>
-            <GestureHandlerRootView style={styles.container} onLayout={onLayoutRootView}>
+            <View style={styles.container} onLayout={onLayoutRootView}>
                 <Navigation />
-                <StatusBar />
+                <StatusBar style="dark" />
                 <Toast position={'bottom'} />
-            </GestureHandlerRootView>
+            </View>
         </ErrorBoundary>
     );
 }
@@ -42,14 +38,9 @@ function HydratedApp({ hydrated }: { hydrated: boolean }) {
 export default function App() {
     return (
         <SafeAreaProvider>
-            <Provider store={store}>
-                <ThemeProvider theme={Theme}>
-                    <PersistGate loading={null} persistor={persistor}>
-                        {/* @ts-expect-error */}
-                        {(hydrated: boolean) => <HydratedApp hydrated={hydrated} />}
-                    </PersistGate>
-                </ThemeProvider>
-            </Provider>
+            <ScanStoreProvider>
+                <HydratedApp />
+            </ScanStoreProvider>
         </SafeAreaProvider>
     );
 }

@@ -6,22 +6,9 @@ const linking: LinkingOptions<RootStackParamList> = {
     prefixes: [Linking.createURL('/')],
     config: {
         screens: {
-            Root: {
-                screens: {
-                    Scan: {
-                        screens: {
-                            SendEmail: 'SendEmail',
-                            ScanHistory: 'ScanHistory',
-                            Scan: 'Scan',
-                        },
-                    },
-                    Email: {
-                        screens: {
-                            EmailHistory: 'EmailHistory',
-                        },
-                    },
-                },
-            },
+            SendEmail: 'email',
+            ScanHistory: '',
+            Scan: 'scan',
             NotFound: '*',
         },
     },

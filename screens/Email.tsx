@@ -1,116 +1,128 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import { CompositeScreenProps } from '@react-navigation/native';
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Input } from '@rneui/themed';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as MailComposer from 'expo-mail-composer';
+import React, { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { z } from 'zod';
 import Toast from 'react-native-toast-message';
 
-import { AppState, ScanStackParamList, BottomTabsParamList } from '../types';
+import { RootStackParamList } from '../types';
 import Separator from '../components/Separator';
 import Colors from '../constants/Colors';
-import { sendEmail } from '../modules/appSlice';
 import MessageBox from '../components/MessageBox';
-import { AppDispatch, RootState } from '../modules/store';
+import PrimaryButton from '../components/PrimaryButton';
+import { useScanStore } from '../modules/ScanStore';
 
-type Props = CompositeScreenProps<
-    StackScreenProps<ScanStackParamList, 'SendEmail'>,
-    BottomTabScreenProps<BottomTabsParamList>
->;
+type Props = NativeStackScreenProps<RootStackParamList, 'SendEmail'>;
 
 export default function EmailScreen(props: Props) {
     const { route, navigation } = props;
-    const dispatch = useDispatch<AppDispatch>();
-    const dispatchSendEmail = async (toEmail: string, content: string) =>
-        dispatch(sendEmail(toEmail, content));
+    const { scans } = useScanStore();
 
-    // current scans in Redux
-    const selectScans = (state: RootState) => state.scans;
-    const currentScans = useSelector(selectScans);
-
-    // save selected scan Ids in route params
     const selectedScanIds = route.params?.selectedScanIds || [];
-    // customize to email address
     const [errorMessage, setErrorMessage] = useState<string>('');
-    // customize to email address
-    const [emailSending, setEmailSending] = useState<boolean>(false);
-    // customize to email address
+    const [composing, setComposing] = useState(false);
+    const [mailAvailable, setMailAvailable] = useState<boolean | null>(null);
     const [toAddress, setToAddress] = useState<string>('');
-    const body = currentScans
+    const body = scans
         .filter((scan) => selectedScanIds.indexOf(scan.id) > -1)
         .map((scanRecord) => scanRecord.data)
         .join('\n\n');
 
-    const onSendEmail = async () => {
-        setEmailSending(true);
-        const success: boolean = await dispatchSendEmail(toAddress, body);
-        setEmailSending(false);
-
-        console.log(`dispatchSendEmail success? ${typeof success} ${JSON.stringify(success)}`);
-
-        if (success) {
-            // blow out selected scans
-            setErrorMessage('');
-            // @ts-ignore
-            navigation.navigate('Scan', {
-                screen: 'ScanHistory',
-                params: { selectedScanIds: [] },
-            });
-            // @ts-ignore
-            navigation.navigate('Email', { screen: 'EmailHistory' });
-            Toast.show({
-                type: 'success',
-                text1: 'Success! Email sent.',
-                text2: 'Pull to refresh and get the latest email activity.',
-                visibilityTime: 5000,
-            });
-        } else {
-            setErrorMessage('Whoops! There was an issue sending that email. Try again later.');
-        }
-    };
+    useEffect(() => {
+        MailComposer.isAvailableAsync().then(setMailAvailable).catch(() => setMailAvailable(false));
+    }, []);
 
     const validateAndSendEmail = async () => {
-        const isEmail = z.email().safeParse(toAddress).success;
-        if (isEmail && body.length) {
-            onSendEmail();
-        } else {
-            setErrorMessage(`Invalid email address or contents.`);
+        const recipient = toAddress.trim();
+        if (!z.email().safeParse(recipient).success || !body.length) {
+            setErrorMessage('Enter a valid email address and select at least one scan.');
+            return;
+        }
+
+        setComposing(true);
+        setErrorMessage('');
+
+        try {
+            if (mailAvailable) {
+                const result = await MailComposer.composeAsync({
+                    body,
+                    recipients: [recipient],
+                    subject: 'QR Scan Contents',
+                });
+
+                if (result.status === MailComposer.MailComposerStatus.SENT) {
+                    navigation.navigate('ScanHistory', { selectedScanIds: [] });
+                    Toast.show({ type: 'success', text1: 'Email sent' });
+                } else if (result.status === MailComposer.MailComposerStatus.SAVED) {
+                    Toast.show({ type: 'info', text1: 'Draft saved' });
+                }
+            } else {
+                await Share.share({
+                    message: `To: ${recipient}\n\n${body}`,
+                    title: 'QR Scan Contents',
+                });
+            }
+        } catch {
+            setErrorMessage('Unable to open an email or sharing app. Please try again.');
+        } finally {
+            setComposing(false);
         }
     };
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollContainer}>
-                <Input
-                    containerStyle={styles.emailInput}
+        <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.container}
+        >
+            <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+                <Text style={styles.label}>Recipient</Text>
+                <TextInput
+                    autoCapitalize="none"
+                    autoComplete="email"
                     keyboardType="email-address"
-                    label="Email address"
                     onChangeText={setToAddress}
+                    placeholder="name@example.com"
+                    style={styles.emailInput}
+                    value={toAddress}
                 />
                 {errorMessage.length ? <MessageBox error={true} message={errorMessage} /> : null}
-                <Button
-                    disabled={emailSending}
-                    loading={emailSending}
-                    icon={{ color: 'white', name: 'send', type: 'font-awesome' }}
+                {mailAvailable === false ? (
+                    <Text style={styles.hint}>
+                        No mail account is available, so the system share sheet will open instead.
+                    </Text>
+                ) : null}
+                <PrimaryButton
+                    disabled={mailAvailable === null}
+                    icon={mailAvailable === false ? 'share-variant-outline' : 'email-outline'}
+                    loading={composing}
                     onPress={validateAndSendEmail}
-                    title={'Send Email'}
+                    title={mailAvailable === false ? 'Share scans' : 'Compose email'}
                 />
 
                 <Separator />
                 <Text style={styles.title}>Email Contents:</Text>
                 <MessageBox message={body} />
             </ScrollView>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1 },
-    emailInput: { marginTop: 20 },
-    scrollContainer: { paddingHorizontal: 30 },
+    container: { backgroundColor: '#f8fafc', flex: 1 },
+    emailInput: {
+        backgroundColor: '#ffffff',
+        borderColor: '#cbd5e1',
+        borderRadius: 10,
+        borderWidth: 1,
+        color: '#0f172a',
+        fontSize: 16,
+        marginBottom: 12,
+        minHeight: 50,
+        paddingHorizontal: 14,
+    },
+    hint: { color: '#64748b', fontSize: 13, lineHeight: 19, marginBottom: 14 },
+    label: { color: '#334155', fontSize: 14, fontWeight: '700', marginBottom: 8 },
+    scrollContainer: { padding: 24 },
     title: {
         color: Colors.light.text,
         fontSize: 20,

@@ -1,9 +1,9 @@
 import React from 'react';
 import { openURL } from 'expo-linking';
-import { StyleSheet } from 'react-native';
-import { ListItem } from '@rneui/themed';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { formatDistanceToNow } from 'date-fns';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
+import Toast from 'react-native-toast-message';
 
 import { ScanRecord } from '../types';
 import Colors from '../constants/Colors';
@@ -19,35 +19,64 @@ export default function ScanRecordListItem(props: Props) {
     const { isSelected, scanRecord, selectMode, toggleSelected } = props;
     const { data, id, isLink } = scanRecord;
 
-    const onPress = (): undefined | (() => void) => {
+    const onPress = async () => {
         if (selectMode) {
-            return () => toggleSelected(id);
+            toggleSelected(id);
         } else if (isLink) {
-            // links should open, when not in select mode
-            return () => openURL(data);
+            try {
+                await openURL(data);
+            } catch {
+                Toast.show({ type: 'error', text1: 'Unable to open this link' });
+            }
         } else {
-            // if an item isn't a link, enable multi-selection when tapping the text
-            return () => toggleSelected(id);
+            toggleSelected(id);
         }
     };
 
     const dateAgo = formatDistanceToNow(new Date(id), { addSuffix: true });
 
     return (
-        <ListItem bottomDivider style={{ flex: 10 }}>
-            <ListItem.CheckBox checked={isSelected} onPress={() => toggleSelected(id)} />
-            <TouchableOpacity onPress={onPress()} containerStyle={{ flex: 8 }}>
-                <ListItem.Content>
-                    <ListItem.Title style={isLink ? styles.title : { color: Colors.light.text }}>
-                        {data}
-                    </ListItem.Title>
-                    <ListItem.Subtitle>{dateAgo}</ListItem.Subtitle>
-                </ListItem.Content>
-            </TouchableOpacity>
-        </ListItem>
+        <Pressable
+            accessibilityHint={isLink && !selectMode ? 'Opens the scanned link' : 'Selects this scan'}
+            accessibilityRole={isLink && !selectMode ? 'link' : 'button'}
+            onLongPress={() => toggleSelected(id)}
+            onPress={onPress}
+            style={({ pressed }) => [styles.container, isSelected && styles.selected, pressed && styles.pressed]}
+        >
+            <MaterialDesignIcons
+                color={isSelected ? Colors.light.primary : '#94a3b8'}
+                name={isSelected ? 'checkbox-marked-circle' : 'checkbox-blank-circle-outline'}
+                size={26}
+            />
+            <View style={styles.content}>
+                <Text numberOfLines={3} style={[styles.title, isLink && styles.link]}>
+                    {data}
+                </Text>
+                <Text style={styles.subtitle}>{dateAgo}</Text>
+            </View>
+            {isLink && !selectMode ? (
+                <MaterialDesignIcons color="#94a3b8" name="open-in-new" size={20} />
+            ) : null}
+        </Pressable>
     );
 }
 
 const styles = StyleSheet.create({
-    title: { color: 'blue', textDecorationLine: 'underline' },
+    container: {
+        alignItems: 'center',
+        backgroundColor: '#ffffff',
+        borderBottomColor: '#e2e8f0',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        flexDirection: 'row',
+        gap: 14,
+        minHeight: 78,
+        paddingHorizontal: 18,
+        paddingVertical: 14,
+    },
+    content: { flex: 1, gap: 5 },
+    link: { color: '#0878c9' },
+    pressed: { backgroundColor: '#f1f5f9' },
+    selected: { backgroundColor: '#eff8ff' },
+    subtitle: { color: '#64748b', fontSize: 13 },
+    title: { color: Colors.light.text, fontSize: 16, lineHeight: 22 },
 });

@@ -1,51 +1,59 @@
 {
-    "expo": {
-        "name": "mobile-scanner",
-        "slug": "mobile-scanner",
-        "scheme": "mobile-scanner",
-        "description": "Mobile QR Code Scanner and Emailing App",
-        "version": "1.0.0",
-        "owner": "synergetx",
-        "orientation": "portrait",
-        "icon": "./assets/images/icon.png",
-        "userInterfaceStyle": "automatic",
-        "platforms": ["ios", "android"],
-        "runtimeVersion": {
-            "policy": "sdkVersion"
-        },
-        "splash": {
-            "image": "./assets/images/splash.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#ffffff"
-        },
-        "updates": {
-            "fallbackToCacheTimeout": 0
-        },
-        "assetBundlePatterns": ["assets/**/*"],
-        "ios": {
-            "supportsTablet": true,
-            "bundleIdentifier": "com.synergetx.mobilescanner"
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/images/adaptive-icon.png",
-                "backgroundColor": "#FFFFFF"
-            },
-            "package": "com.synergetx.mobilescanner",
-            "permissions": ["CAMERA"]
-        },
-        "web": {
-            "favicon": "./assets/images/favicon.png"
-        },
-        "plugins": [
-            "expo-asset",
-            "expo-font",
-            [
-                "expo-camera",
-                {
-                    "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes."
-                }
-            ]
-        ]
+  "expo": {
+    "name": "mobile-scanner",
+    "slug": "mobile-scanner",
+    "scheme": "mobile-scanner",
+    "description": "Mobile QR Code Scanner and Emailing App",
+    "version": "1.0.0",
+    "owner": "synergetx",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "runtimeVersion": {
+      "policy": "fingerprint"
+    },
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.synergetx.mobilescanner"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "package": "com.synergetx.mobilescanner"
+    },
+    "web": {
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera to scan QR codes.",
+          "recordAudioAndroid": false
+        }
+      ],
+      "expo-status-bar",
+      "expo-mail-composer",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/images/splash.png",
+          "imageWidth": 220,
+          "resizeMode": "contain"
+        }
+      ]
+    ],
+    "experiments": {
+      "reactCompiler": true
     }
+  }
 }

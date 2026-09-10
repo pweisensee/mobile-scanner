@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Icon } from '@rneui/themed';
+import { StyleSheet, Text, View } from 'react-native';
+
+import IconButton from './IconButton';
 
 type Props = {
     onPress: () => void;
@@ -8,15 +9,17 @@ type Props = {
 
 export default function NewScanButton({ onPress }: Props) {
     return (
-        <View style={styles.container}>
-            <View style={styles.rowContainer}>
-                <Icon
+        <View pointerEvents="box-none" style={styles.container}>
+            <View style={styles.action}>
+                <IconButton
+                    accessibilityLabel="Scan a QR code"
+                    filled
                     name="qrcode-scan"
                     onPress={onPress}
-                    raised
-                    reverse
-                    type="material-community"
+                    size={27}
+                    style={styles.button}
                 />
+                <Text style={styles.label}>Scan</Text>
             </View>
         </View>
     );
@@ -25,13 +28,14 @@ export default function NewScanButton({ onPress }: Props) {
 const styles = StyleSheet.create({
     container: {
         position: 'absolute',
-        bottom: 40,
+        bottom: 24,
         width: '100%',
-    },
-    rowContainer: {
         alignItems: 'center',
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
     },
+    action: {
+        alignItems: 'center',
+        gap: 5,
+    },
+    button: { height: 58, width: 58, borderRadius: 29 },
+    label: { color: '#334155', fontSize: 12, fontWeight: '600' },
 });

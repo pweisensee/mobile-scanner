@@ -1,13 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Icon } from '@rneui/themed';
+import { MaterialDesignIcons } from '@react-native-vector-icons/material-design-icons';
 
 export default function ScanPlaceholder() {
     return (
         <View style={styles.container}>
-            <Text style={styles.message}>No scans yet.</Text>
-            <Text style={styles.title}>Just tap below to start scanning!</Text>
-            <Icon name="arrow-downward" size={40} type="material" />
+            <View style={styles.iconContainer}>
+                <MaterialDesignIcons color="#0878c9" name="qrcode-scan" size={40} />
+            </View>
+            <Text style={styles.title}>No scans yet</Text>
+            <Text style={styles.message}>Tap the scan button to capture your first QR code.</Text>
         </View>
     );
 }
@@ -15,13 +17,26 @@ export default function ScanPlaceholder() {
 const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
-        flex: 0.5,
-        justifyContent: 'space-evenly',
-        marginVertical: 50,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        maxWidth: 320,
+        paddingHorizontal: 24,
+        paddingTop: 120,
     },
-    message: { fontSize: 17 },
+    iconContainer: {
+        alignItems: 'center',
+        backgroundColor: '#e6f3fb',
+        borderRadius: 36,
+        height: 72,
+        justifyContent: 'center',
+        marginBottom: 20,
+        width: 72,
+    },
+    message: { color: '#64748b', fontSize: 16, lineHeight: 23, textAlign: 'center' },
     title: {
-        fontSize: 20,
-        fontWeight: 'bold',
+        color: '#0f172a',
+        fontSize: 22,
+        fontWeight: '700',
+        marginBottom: 8,
     },
 });

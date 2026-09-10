@@ -1,73 +1,59 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Button } from '@rneui/themed';
-import { Dispatch } from 'redux';
+import { Alert, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
-import { removeScans } from '../modules/appSlice';
-import Colors from '../constants/Colors';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { ScanStackParamList } from '../types';
+import IconButton from './IconButton';
 
 type Props = {
-    dispatch: Dispatch<any>;
-    navigation: StackNavigationProp<ScanStackParamList, 'ScanHistory'>;
+    onCancel: () => void;
+    onDelete: () => void;
+    onEmail: () => void;
     selectedScanIds: number[];
-    selectMode: boolean;
 };
 
 export default function ScanHistoryActions(props: Props) {
-    const { dispatch, navigation, selectedScanIds, selectMode } = props;
+    const { onCancel, onDelete, onEmail, selectedScanIds } = props;
 
-    // delete scans from redux
-    const deleteScans = () => {
-        dispatch(removeScans(selectedScanIds));
-
-        // blow out selected scans
-        props.navigation.navigate('ScanHistory', { selectedScanIds: [] });
+    const confirmDelete = () => {
+        Alert.alert(
+            `Delete ${selectedScanIds.length} ${selectedScanIds.length === 1 ? 'scan' : 'scans'}?`,
+            'This cannot be undone.',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'Delete', style: 'destructive', onPress: onDelete },
+            ]
+        );
     };
 
     return (
         <View style={styles.rowContainer}>
-            {selectMode ? (
+            {selectedScanIds.length > 0 ? (
                 <>
-                    <Button
-                        containerStyle={{ paddingHorizontal: 1 }}
-                        type="clear"
-                        icon={{
-                            color: Colors.light.text,
-                            name: 'close',
-                            type: 'material-community',
-                        }}
+                    <IconButton
+                        accessibilityLabel="Cancel selection"
+                        name="close"
                         onPress={() => {
-                            navigation.setParams({ selectedScanIds: [], selectMode: false });
+                            onCancel();
                             Toast.show({
                                 type: 'info',
-                                text1: `All selections cancelled`,
+                                text1: 'Selection cleared',
                                 visibilityTime: 2500,
                             });
                         }}
                     />
-                    <Button
-                        containerStyle={{ paddingHorizontal: 1 }}
-                        type="clear"
-                        icon={{
-                            color: 'red',
-                            name: 'delete-forever',
-                            type: 'material-community',
-                        }}
-                        onPress={deleteScans}
+                    <IconButton
+                        accessibilityLabel={`Delete ${selectedScanIds.length} selected scans`}
+                        color="#dc2626"
+                        name="delete-outline"
+                        onPress={confirmDelete}
                     />
-                    <Button
-                        containerStyle={{ paddingHorizontal: 1, paddingRight: 10 }}
-                        type="clear"
-                        icon={{
-                            name: 'send',
-                            type: 'font-awesome',
-                        }}
+                    <IconButton
+                        accessibilityLabel={`Email ${selectedScanIds.length} selected scans`}
+                        color="#0878c9"
+                        name="send-outline"
                         onPress={() => {
                             Toast.hide();
-                            navigation.navigate('SendEmail', { selectedScanIds });
+                            onEmail();
                         }}
                     />
                 </>
@@ -79,8 +65,7 @@ export default function ScanHistoryActions(props: Props) {
 const styles = StyleSheet.create({
     rowContainer: {
         alignItems: 'center',
-        flex: 1,
         flexDirection: 'row',
-        justifyContent: 'center',
+        gap: 2,
     },
 });

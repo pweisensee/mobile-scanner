@@ -1,25 +1,20 @@
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useDispatch, useSelector } from 'react-redux';
+import { FlatList, StyleSheet, View } from 'react-native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Toast from 'react-native-toast-message';
 
 import NewScanButton from '../components/NewScanButton';
-import { AppState, ScanStackParamList } from '../types';
+import { RootStackParamList } from '../types';
 import ScanRecordListItem from '../components/ScanRecordListItem';
 import ScanHistoryActions from '../components/ScanHistoryActions';
 import ScanPlaceholder from '../components/ScanPlaceholder';
+import { useScanStore } from '../modules/ScanStore';
 
-interface Props extends StackScreenProps<ScanStackParamList, 'ScanHistory'> {}
+type Props = NativeStackScreenProps<RootStackParamList, 'ScanHistory'>;
 
 export default function ScanHistoryScreen(props: Props) {
     const { navigation, route } = props;
-    const dispatch = useDispatch();
-
-    // current scans in Redux
-    const selectScans = (state: AppState) => state.scans;
-    const currentScans = useSelector(selectScans);
+    const { removeScans, scans } = useScanStore();
 
     // save selected scan Ids in route params
     const selectedScanIds = route.params?.selectedScanIds || [];
@@ -32,14 +27,21 @@ export default function ScanHistoryScreen(props: Props) {
         navigation.setOptions({
             headerRight: () => (
                 <ScanHistoryActions
-                    dispatch={dispatch}
-                    navigation={navigation}
+                    onCancel={() => navigation.setParams({ selectedScanIds: [] })}
+                    onDelete={() => {
+                        removeScans(selectedScanIds);
+                        navigation.setParams({ selectedScanIds: [] });
+                        Toast.show({
+                            type: 'success',
+                            text1: `${selectedScanIds.length} ${selectedScanIds.length === 1 ? 'scan' : 'scans'} deleted`,
+                        });
+                    }}
+                    onEmail={() => navigation.navigate('SendEmail', { selectedScanIds })}
                     selectedScanIds={selectedScanIds}
-                    selectMode={selectMode}
                 />
             ),
         });
-    }, [navigation, selectedScanIds, selectMode]);
+    }, [navigation, removeScans, selectedScanIds]);
 
     const toggleSelection = (id: number) => {
         const index = selectedScanIds.indexOf(id);
@@ -66,21 +68,20 @@ export default function ScanHistoryScreen(props: Props) {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                {currentScans?.length ? (
-                    currentScans.map((item, index) => (
-                        <ScanRecordListItem
-                            key={index}
-                            isSelected={selectedScanIds.indexOf(item.id) > -1}
-                            scanRecord={item}
-                            selectMode={selectMode}
-                            toggleSelected={toggleSelection}
-                        />
-                    ))
-                ) : (
-                    <ScanPlaceholder />
+            <FlatList
+                contentContainerStyle={scans.length ? styles.list : styles.emptyList}
+                data={scans}
+                keyExtractor={(item) => String(item.id)}
+                ListEmptyComponent={ScanPlaceholder}
+                renderItem={({ item }) => (
+                    <ScanRecordListItem
+                        isSelected={selectedScanIds.includes(item.id)}
+                        scanRecord={item}
+                        selectMode={selectMode}
+                        toggleSelected={toggleSelection}
+                    />
                 )}
-            </ScrollView>
+            />
             <NewScanButton onPress={() => props.navigation.navigate('Scan')} />
         </View>
     );
@@ -89,5 +90,8 @@ export default function ScanHistoryScreen(props: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#f8fafc',
     },
+    emptyList: { flexGrow: 1 },
+    list: { paddingBottom: 110 },
 });
